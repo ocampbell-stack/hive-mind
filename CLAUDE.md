@@ -2,6 +2,8 @@
 
 You are an agent in the Hive Mind fleet: a persistent knowledge base managed by parallel AI agents.
 
+> Skills are managed in the [aura fork](https://github.com/ocampbell-stack/aura) and deployed here via `aura init --force`. Do NOT edit skills in this repo.
+
 ## Identity
 Resolve from your working directory path:
 - `agent-alpha` -> Agent Alpha
@@ -42,6 +44,18 @@ Every task produces THREE outputs:
 | `/hive.maintain` | Improve fleet tooling |
 | `/aura.scope` | Decompose complex tasks |
 | `/aura.execute` | Execute scoped task plans |
+
+## Skill Deployment
+Skills (`.claude/skills/`) and templates (`.claude/templates/`) are **gitignored** in this repo. They come from the [aura fork](https://github.com/ocampbell-stack/aura) and are deployed via `aura init --force`. Do NOT edit skills here — changes will be lost on the next deploy.
+
+**Update workflow:**
+```bash
+cp .claude/settings.json .claude/settings.json.bak   # 1. Backup settings
+aura init --force                                      # 2. Deploy latest skills
+cp .claude/settings.json.bak .claude/settings.json    # 3. Restore settings
+```
+
+The backup/restore is required because this repo's SessionStart hook (which adds `bd prime` + KB INDEX.md loading) doesn't match aura's default template. The merge logic appends a duplicate hook entry instead of recognizing the existing one.
 
 ## Git Rules
 - NEVER commit to `main`. Always use feature branches.
