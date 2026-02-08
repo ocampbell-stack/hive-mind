@@ -1,0 +1,19 @@
+# Visions queue contents (don't commit audio/transcripts)
+visions/queue/*
+!visions/queue/.gitkeep
+visions/processed/*
+!visions/processed/.gitkeep
+visions/failed/*
+!visions/failed/.gitkeep
+
+# Plans (user content, optionally commit)
+# plans/ - not ignored by default, user choice
+
+# Environment
+.env
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
