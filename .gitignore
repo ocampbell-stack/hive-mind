@@ -1,3 +1,7 @@
+# Deployed by aura init — not tracked in hive-mind
+.claude/skills/
+.claude/templates/
+
 # Environment
 .env
 .venv/
