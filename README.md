@@ -117,59 +117,110 @@ See [`protocols/privacy-standards.md`](protocols/privacy-standards.md) for the f
 
 ### Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — Anthropic's CLI
-- [beads](https://github.com/steveyegge/beads) (`bd`) — Git-native issue tracking
-- [aur2](https://github.com/ocampbell-stack/aur2) — Skill scaffolding
-- [GitHub CLI](https://cli.github.com/) (`gh`) — Authenticated for PR creation
-- [uv](https://github.com/astral-sh/uv) — Python package manager
+Install these tools before setting up your instance:
 
-### Create Your Instance
+| Tool | Install | Purpose |
+|---|---|---|
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | See docs | AI agent runtime |
+| [GitHub CLI](https://cli.github.com/) | `brew install gh` | Repo and PR management |
+| [uv](https://github.com/astral-sh/uv) | `brew install uv` | Python package manager |
+| [beads](https://github.com/steveyegge/beads) | `brew tap steveyegge/beads && brew install beads` | Git-native issue tracking |
+| [sox](http://sox.sourceforge.net/) | `brew install sox` | Audio recording (optional, for voice visions) |
+| [ffmpeg](https://ffmpeg.org/) | `brew install ffmpeg` | Audio processing (optional, for voice visions) |
+
+After installing `gh`, authenticate: `gh auth login`
+
+### Step 1: Create Your Private Instance
 
 This repo is a **GitHub template**. Create your own private instance:
 
 ```bash
-# Create a private instance from the template
 gh repo create my-hive-mind --template ocampbell-stack/hive-mind --private --clone
 cd my-hive-mind
 ```
 
 Or click **"Use this template"** on GitHub and select **Private**.
 
-### Setup
+### Step 2: Install Aur2
+
+[Aur2](https://github.com/ocampbell-stack/aur2) provides the skills and scaffolding. Install it once per machine:
 
 ```bash
-# Install aur2 (if not already installed)
 git clone https://github.com/ocampbell-stack/aur2.git ~/aur2
-cd ~/aur2 && uv venv && uv pip install -e . && cd -
+cd ~/aur2
+uv venv && source .venv/bin/activate
+uv pip install -e .
+aur2 --version   # Should print: aur2, version 0.1.0
+```
+
+Add aur2 to your PATH (add to your shell profile):
+```bash
+export PATH="$HOME/aur2/.venv/bin:$PATH"
+```
+
+### Step 3: Deploy Skills and Set Up Fleet
+
+```bash
+cd ~/my-hive-mind   # or wherever you cloned your instance
 
 # Deploy skills from aur2
 aur2 init --force --skip-settings
 
-# Create agent worktrees
+# Create agent worktrees (name your agents whatever you like)
 ./scripts/setup-fleet.sh alpha beta
 
-# Verify
+# Verify everything works
 aur2 check && bd ready && gh auth status
+```
+
+This creates the workspace layout:
+```
+~/
+├── my-hive-mind/        Command Post (your primary window, main branch)
+├── agent-alpha/          Worktree on agent-alpha/workspace branch
+└── agent-beta/           Worktree on agent-beta/workspace branch
+```
+
+### Step 4: (Optional) Set Up Voice Visions
+
+If you want to capture ideas via audio recording:
+
+```bash
+cp .aur2/.env.example .aur2/.env
+# Edit .aur2/.env and add your OpenAI API key
+
+uv venv .aur2/.venv
+source .aur2/.venv/bin/activate
+uv pip install -r .aur2/scripts/requirements.txt
 ```
 
 ### Assigning Tasks
 
-**Manual mode** (quick edits, real-time interaction):
+**Manual mode** — you drive the agent directly:
 ```bash
-cd hive-mind-main
+cd my-hive-mind
 claude
-# Work directly with the agent on main
+# Work with the agent on main, review changes in real time
 ```
 
-**Autonomous mode** (delegated tasks with PR review):
+**Autonomous mode** — delegate work, review via PR:
 ```bash
 cd agent-alpha
 claude
-> /hive.ingest the attached meeting notes from the Feb 12 design review
-# Agent handles: sync → branch → work → commit → PR
-# Review the PR on GitHub, leave comments for changes
-# Then: /hive.iterate #<PR-number> to address feedback
+> /hive.ingest the attached meeting notes from the design review
+# Agent: syncs → branches → works → commits → creates PR
+# You: review the PR on GitHub, leave comments if needed
+# Agent: /hive.iterate #<PR-number> to address your feedback
 ```
+
+### What's Next?
+
+Once your instance is running, try these first tasks:
+
+1. **Ingest context**: `/hive.ingest` some notes about your role, current projects, or team
+2. **Check the KB**: Look at `knowledge-base/INDEX.md` to see what was added
+3. **Groom**: `/hive.groom` to audit the KB for gaps
+4. **Produce a deliverable**: `/hive.deliver` a document grounded in your KB context
 
 ## Repository Structure
 

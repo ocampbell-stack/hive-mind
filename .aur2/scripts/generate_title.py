@@ -2,12 +2,12 @@
 """Generate memorable, human-readable titles for transcriptions using an LLM.
 
 Usage:
-    python .aura/scripts/generate_title.py --text "transcription text"
-    python .aura/scripts/generate_title.py --file transcription.txt
-    echo "transcription text" | python .aura/scripts/generate_title.py
+    python .aur2/scripts/generate_title.py --text "transcription text"
+    python .aur2/scripts/generate_title.py --file transcription.txt
+    echo "transcription text" | python .aur2/scripts/generate_title.py
 
 Requirements:
-    pip install -r .aura/scripts/requirements.txt
+    pip install -r .aur2/scripts/requirements.txt
 
 Environment:
     OPENAI_API_KEY - Required. Your OpenAI API key.
@@ -71,13 +71,13 @@ def generate_title(transcription: str, model: str = "gpt-4o-mini") -> str:
         Sanitized kebab-case title
     """
     # Load environment variables from .env file
-    # Check .aura/.env first (standard location), then .env in current dir
+    # Check .aur2/.env first (standard location), then .env in current dir
     try:
         from dotenv import load_dotenv
         from pathlib import Path
-        aura_env = Path(".aura/.env")
-        if aura_env.exists():
-            load_dotenv(aura_env)
+        aur2_env = Path(".aur2/.env")
+        if aur2_env.exists():
+            load_dotenv(aur2_env)
         else:
             load_dotenv()  # Falls back to .env in current directory
     except ImportError:
@@ -136,9 +136,9 @@ def main():
     parser = argparse.ArgumentParser(
         description="Generate memorable titles for transcriptions using an LLM",
         epilog="Examples:\n"
-               "  echo 'Meeting notes about API refactor' | python .aura/scripts/generate_title.py\n"
-               "  python .aura/scripts/generate_title.py --file transcription.txt\n"
-               "  python .aura/scripts/generate_title.py --text 'Quick memo about the bug fix'\n",
+               "  echo 'Meeting notes about API refactor' | python .aur2/scripts/generate_title.py\n"
+               "  python .aur2/scripts/generate_title.py --file transcription.txt\n"
+               "  python .aur2/scripts/generate_title.py --text 'Quick memo about the bug fix'\n",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
@@ -164,13 +164,13 @@ def main():
     args = parser.parse_args()
 
     # Load environment variables from .env file
-    # Check .aura/.env first (standard location), then .env in current dir
+    # Check .aur2/.env first (standard location), then .env in current dir
     try:
         from dotenv import load_dotenv
         from pathlib import Path
-        aura_env = Path(".aura/.env")
-        if aura_env.exists():
-            load_dotenv(aura_env)
+        aur2_env = Path(".aur2/.env")
+        if aur2_env.exists():
+            load_dotenv(aur2_env)
         else:
             load_dotenv()  # Falls back to .env in current directory
     except ImportError:
@@ -179,7 +179,7 @@ def main():
     # Check for API key
     if not os.environ.get("OPENAI_API_KEY"):
         print("Error: OPENAI_API_KEY environment variable not set", file=sys.stderr)
-        print("Set it in .aura/.env or export it: export OPENAI_API_KEY=your-key", file=sys.stderr)
+        print("Set it in .aur2/.env or export it: export OPENAI_API_KEY=your-key", file=sys.stderr)
         sys.exit(1)
 
     # Check for required dependencies
@@ -187,7 +187,7 @@ def main():
         from openai import OpenAI
     except ImportError:
         print("Error: openai not installed", file=sys.stderr)
-        print("Install dependencies: pip install -r .aura/scripts/requirements.txt", file=sys.stderr)
+        print("Install dependencies: pip install -r .aur2/scripts/requirements.txt", file=sys.stderr)
         sys.exit(1)
 
     # Get transcription text from appropriate source
@@ -206,7 +206,7 @@ def main():
             # Read from stdin
             if sys.stdin.isatty():
                 print("Error: No input provided. Use --file, --text, or pipe text via stdin.", file=sys.stderr)
-                print("Run 'python .aura/scripts/generate_title.py --help' for usage information.", file=sys.stderr)
+                print("Run 'python .aur2/scripts/generate_title.py --help' for usage information.", file=sys.stderr)
                 sys.exit(1)
             transcription = sys.stdin.read()
 

@@ -1,6 +1,6 @@
-# .aura/scripts/requirements.txt
-# Install with: pip install -r .aura/scripts/requirements.txt
-# Or: uv pip install -r .aura/scripts/requirements.txt
+# .aur2/scripts/requirements.txt
+# Install with: pip install -r .aur2/scripts/requirements.txt
+# Or: uv pip install -r .aur2/scripts/requirements.txt
 
 openai>=1.0.0          # Whisper API for transcription
 pydub>=0.25.0          # Audio file manipulation (requires ffmpeg)

@@ -2,14 +2,14 @@
 """Record voice memos with automatic transcription and title generation.
 
 Usage:
-    python .aura/scripts/record_memo.py [--max-duration SECONDS]
+    python .aur2/scripts/record_memo.py [--max-duration SECONDS]
 
 Records audio via sox, transcribes via OpenAI Whisper, generates a title,
-and saves to .aura/visions/queue/<title>/.
+and saves to .aur2/visions/queue/<title>/.
 
 Requirements:
     - sox installed (brew install sox / apt install sox)
-    - pip install -r .aura/scripts/requirements.txt
+    - pip install -r .aur2/scripts/requirements.txt
 
 Environment:
     OPENAI_API_KEY - Required. Your OpenAI API key.
@@ -40,18 +40,18 @@ def check_sox_installed() -> bool:
     return shutil.which("sox") is not None
 
 
-def get_aura_visions_dir() -> Path:
-    """Get the .aura/visions directory path, creating it if needed."""
-    # Try to find .aura directory by walking up from cwd
+def get_visions_dir() -> Path:
+    """Get the .aur2/visions directory path, creating it if needed."""
+    # Try to find .aur2 directory by walking up from cwd
     cwd = Path.cwd()
     for parent in [cwd] + list(cwd.parents):
-        aura_dir = parent / ".aura"
-        if aura_dir.exists():
-            visions_dir = aura_dir / "visions"
+        aur2_dir = parent / ".aur2"
+        if aur2_dir.exists():
+            visions_dir = aur2_dir / "visions"
             return visions_dir
 
-    # Fallback to cwd/.aura/visions
-    return cwd / ".aura" / "visions"
+    # Fallback to cwd/.aur2/visions
+    return cwd / ".aur2" / "visions"
 
 
 def ensure_directories(visions_dir: Path) -> None:
@@ -197,7 +197,7 @@ def save_memo(audio_path: Path, transcript: str | None, visions_dir: Path) -> tu
     Args:
         audio_path: Path to the recorded audio file
         transcript: Transcription text, or None if transcription failed
-        visions_dir: Base visions directory (.aura/visions)
+        visions_dir: Base visions directory (.aur2/visions)
 
     Returns:
         Tuple of (final_dir, success) where success indicates if saved to queue/
@@ -238,8 +238,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Record voice memos with automatic transcription and title generation",
         epilog="Examples:\n"
-               "  python .aura/scripts/record_memo.py\n"
-               "  python .aura/scripts/record_memo.py --max-duration 120\n",
+               "  python .aur2/scripts/record_memo.py\n"
+               "  python .aur2/scripts/record_memo.py --max-duration 120\n",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
@@ -255,9 +255,9 @@ def main():
     # Load environment variables
     try:
         from dotenv import load_dotenv
-        aura_env = Path(".aura/.env")
-        if aura_env.exists():
-            load_dotenv(aura_env)
+        aur2_env = Path(".aur2/.env")
+        if aur2_env.exists():
+            load_dotenv(aur2_env)
         else:
             load_dotenv()
     except ImportError:
@@ -271,11 +271,11 @@ def main():
 
     if not os.environ.get("OPENAI_API_KEY"):
         print("Error: OPENAI_API_KEY environment variable not set", file=sys.stderr)
-        print("Set it in .aura/.env or export it: export OPENAI_API_KEY=your-key", file=sys.stderr)
+        print("Set it in .aur2/.env or export it: export OPENAI_API_KEY=your-key", file=sys.stderr)
         sys.exit(1)
 
     # Get visions directory and ensure structure exists
-    visions_dir = get_aura_visions_dir()
+    visions_dir = get_visions_dir()
     ensure_directories(visions_dir)
 
     # Create temp file for recording
@@ -298,7 +298,7 @@ def main():
 
         if success:
             print(f"\n✓ Memo saved to: {final_dir}", file=sys.stderr)
-            print(f"  Run '/aura.process_visions' to process it.", file=sys.stderr)
+            print(f"  Run '/aur2.process_visions' to process it.", file=sys.stderr)
             sys.exit(0)
         else:
             print(f"\n⚠ Transcription failed. Audio saved to: {final_dir}", file=sys.stderr)

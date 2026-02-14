@@ -2,10 +2,10 @@
 """Transcribe audio files using OpenAI's Whisper API.
 
 Usage:
-    python .aura/scripts/transcribe.py <audio-file-path>
+    python .aur2/scripts/transcribe.py <audio-file-path>
 
 Requirements:
-    pip install -r .aura/scripts/requirements.txt
+    pip install -r .aur2/scripts/requirements.txt
 
 Environment:
     OPENAI_API_KEY - Required. Your OpenAI API key.
@@ -115,13 +115,13 @@ def transcribe_chunks(chunk_paths: list[str], original_path: str, model: str = "
 
 def main():
     # Load environment variables from .env file
-    # Check .aura/.env first (standard location), then .env in current dir
+    # Check .aur2/.env first (standard location), then .env in current dir
     try:
         from dotenv import load_dotenv
         from pathlib import Path
-        aura_env = Path(".aura/.env")
-        if aura_env.exists():
-            load_dotenv(aura_env)
+        aur2_env = Path(".aur2/.env")
+        if aur2_env.exists():
+            load_dotenv(aur2_env)
         else:
             load_dotenv()  # Falls back to .env in current directory
     except ImportError:
@@ -129,7 +129,7 @@ def main():
 
     if len(sys.argv) < 2:
         print("Error: No audio file path provided", file=sys.stderr)
-        print(f"Usage: python .aura/scripts/transcribe.py <audio-file-path>", file=sys.stderr)
+        print(f"Usage: python .aur2/scripts/transcribe.py <audio-file-path>", file=sys.stderr)
         sys.exit(1)
 
     audio_path = sys.argv[1]
@@ -156,7 +156,7 @@ def main():
     # Check for API key
     if not os.environ.get("OPENAI_API_KEY"):
         print("Error: OPENAI_API_KEY environment variable not set", file=sys.stderr)
-        print("Set it in .aura/.env or export it: export OPENAI_API_KEY=your-key", file=sys.stderr)
+        print("Set it in .aur2/.env or export it: export OPENAI_API_KEY=your-key", file=sys.stderr)
         sys.exit(1)
 
     # Check for required dependencies
@@ -164,14 +164,14 @@ def main():
         from pydub import AudioSegment
     except ImportError:
         print("Error: pydub not installed", file=sys.stderr)
-        print("Install dependencies: pip install -r .aura/scripts/requirements.txt", file=sys.stderr)
+        print("Install dependencies: pip install -r .aur2/scripts/requirements.txt", file=sys.stderr)
         sys.exit(1)
 
     try:
         from openai import OpenAI
     except ImportError:
         print("Error: openai not installed", file=sys.stderr)
-        print("Install dependencies: pip install -r .aura/scripts/requirements.txt", file=sys.stderr)
+        print("Install dependencies: pip install -r .aur2/scripts/requirements.txt", file=sys.stderr)
         sys.exit(1)
 
     # Check duration and split into chunks if needed
