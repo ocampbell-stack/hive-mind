@@ -39,13 +39,30 @@ Every task produces THREE outputs:
 
 ## Task Management (Beads)
 
+Every skill follows a standard beads lifecycle. Beads is the single source of truth for what work is happening, who's doing it, and what was learned.
+
+### Bead Lifecycle
+
+Every task — whether triggered by `bd ready` or a direct user request — follows this cycle:
+
+1. **Setup**: Claim an existing bead (`bd update <id> --claim`) or create one (`bd create "Skill: description" -t task`). Read context from prior agents: `bd show <id>`.
+2. **Work**: Execute the skill's instructions. For complex multi-session work, escalate to `/aur2.scope` + `/aur2.execute` instead of doing everything in one shot.
+3. **Record**: Leave context for the next agent via `bd comments add <id> "What was done. Key decisions. Files changed."` — this is the primary inter-agent knowledge transfer mechanism.
+4. **Close**: `bd close <id> --reason "concise summary" --suggest-next` — the reason becomes the bead's permanent record; `--suggest-next` shows newly unblocked work.
+
+### Quick Reference
+
 - Available work: `bd ready --assignee {YOUR_ID}`
 - Claim task: `bd update <id> --claim`
+- View context: `bd show <id>` (description + comments from prior agents)
 - Start work: sync workspace, create feature branch `feat/{agent-name}/{description}`
+- Record progress: `bd comments add <id> "what was done, decisions, files changed"`
 - Link PR: `bd comments add <id> "PR: <url>"`
-- Complete: `bd close <id> --reason "summary"`
+- Complete: `bd close <id> --reason "summary" --suggest-next`
+- Create follow-up: `bd create "Follow up: description" -t task`
 - Message agent: `bd mail`
 - Fleet status: `bd swarm status`
+- Visualize dependencies: `bd graph --all --compact`
 
 ## Skills
 

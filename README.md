@@ -70,9 +70,26 @@ All agent coordination runs through [beads](https://github.com/steveyegge/beads)
 
 - **Task management** — Dependency-aware issue tracking with `bd ready`, `bd create`, `bd close`
 - **Atomic claiming** — Race-safe task assignment via compare-and-swap (`bd update --claim`)
+- **Inter-agent context passing** — `bd comments add` records what was done, key decisions, and files changed on each bead. The next agent reads this context via `bd show <id>` before starting work. This is the primary mechanism for knowledge transfer between agents.
 - **Inter-agent messaging** — `bd mail` for agent-to-agent communication
 - **Fleet visibility** — `bd swarm status`, `bd audit`, `bd graph`
 - **Session context** — `bd prime` automatically injects task state at session start
+- **Complexity escalation** — Single-session tasks run as one bead. Multi-session work is decomposed via `/aur2.scope` into a dependency graph of beads, then executed via `/aur2.execute`
+
+#### Bead Lifecycle in Skills
+
+Every `hive.*` skill follows a standard bead lifecycle:
+
+```
+Setup → Work → Record → Close
+```
+
+1. **Setup** — Claim an existing bead or create a new one. Read prior context via `bd show`.
+2. **Work** — Execute the skill's core instructions.
+3. **Record** — `bd comments add` with a structured summary (what was done, decisions, files changed).
+4. **Close** — `bd close --reason "summary" --suggest-next` to complete and surface newly unblocked work.
+
+Skills may also create follow-up beads for discovered work (e.g., `hive.groom` creates remediation beads, `hive.advise` creates action item beads). These follow-up beads feed the `bd ready` queue for other agents to pick up.
 
 ### Parallel Execution via Worktrees
 
