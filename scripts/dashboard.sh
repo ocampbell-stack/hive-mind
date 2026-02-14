@@ -39,6 +39,11 @@ echo "--- BLOCKED TASKS ---"
 bd blocked 2>/dev/null || echo "  No blocked tasks"
 echo ""
 
+# Epic progress (scope executions)
+echo "--- EPIC PROGRESS ---"
+bd epic status 2>/dev/null || echo "  No active epics"
+echo ""
+
 # Stale tasks (not updated recently)
 echo "--- STALE TASKS ---"
 bd stale 2>/dev/null || echo "  No stale tasks"

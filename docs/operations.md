@@ -116,39 +116,41 @@ bd close <id> --reason "No longer needed — superseded by <id>"
 
 ## Monitoring Multi-Bead Projects
 
-When `/aur2.scope` + `/aur2.execute` decompose work into a bead graph:
+When `/aur2.scope` + `/aur2.execute` decompose work into a bead graph, an **epic** bead is created as a parent container for all the scope's tasks. This gives you a single ID to track progress.
+
+### Checking Scope Progress
+
+```bash
+bd epic status                   # Summary of all epics (completed/total per epic)
+bd swarm status <epic-id>        # Detailed breakdown: completed, active, ready, blocked
+bd ready --parent <epic-id>      # What's available in this specific scope
+bd graph --all --compact         # Full dependency DAG across all scopes
+```
+
+The dashboard (`./scripts/dashboard.sh`) includes an "EPIC PROGRESS" section that shows this automatically.
 
 ### During Execution
 
+The agent works through beads sequentially on a single feature branch. You can check in from Command Post at any time:
+
 ```bash
-bd graph --all --compact    # See the full dependency DAG
-bd list --status open       # How many are left
-bd list --status in_progress  # What's actively being worked
+bd swarm status <epic-id>    # How far along is this scope?
+bd list --status in_progress   # What's the agent working on right now?
 ```
 
 ### After Partial Completion
 
-If a session ends before all beads are done (e.g., context limit), the remaining beads stay in the ready queue. Start a new session and the agent picks up where it left off:
+If a session ends before all beads are done (e.g., context limit), the remaining beads stay in the ready queue under the epic. Start a new session in the same worktree and the agent picks up where it left off:
 
 ```bash
 cd agent-alpha
 claude
-> Continue working through bd ready
+> Continue working through bd ready --parent <epic-id>
 ```
 
-### Distributing Across Multiple Agents
+### One Scope = One Agent = One PR
 
-Currently, `/aur2.execute` runs all phases in one session. To distribute a scope across multiple agents:
-
-1. Run `/aur2.scope` to create the plan
-2. Run `/aur2.execute <scope-path>` — let it complete Phase 1 (bead graph creation)
-3. If the agent completes some beads but not all, the remaining unblocked beads appear in `bd ready`
-4. Launch additional agents to pick up remaining work:
-   ```bash
-   cd agent-beta
-   claude
-   > Check bd ready and work on available tasks
-   ```
+Each scope execution runs on a single feature branch and produces a single PR. Multi-agent parallelism happens at the scope level — assign different scopes to different agents, not different beads within the same scope.
 
 ## Handling Follow-Up Beads
 
