@@ -27,9 +27,9 @@ The rationale: we must assume the *next* agent will need to know what this agent
 
 A third component, **Verification**, ensures that deliverables are faithful to the assignment, consistent with existing knowledge, and compliant with privacy standards. See [`protocols/`](protocols/) for the full verification framework.
 
-### The 5 Agent Workflows
+### Agent Workflows
 
-Agents in this fleet execute one of five specific workflows, each backed by a dedicated Claude Code skill:
+Agents in this fleet execute specific workflows, each backed by a dedicated Claude Code skill:
 
 | Workflow | Skill | Description |
 |---|---|---|
@@ -38,12 +38,18 @@ Agents in this fleet execute one of five specific workflows, each backed by a de
 | **Produce Deliverables** | `/hive.deliver` | Generate stakeholder-facing outputs — documents, code, plans, analyses — grounded in the current state of the knowledge base. Every claim traceable to a KB source. |
 | **Recommend Engagement** | `/hive.advise` | Analyze meeting minutes, chat threads, or communications and recommend specific actions: feedback to give, questions to ask, risks to flag. Informed by team models and project context but never exposing internal assessments. |
 | **Maintain the Fleet** | `/hive.maintain` | Improve the Hive Mind's own tooling, scripts, skills, and infrastructure. The system maintains itself. |
+| **Iterate on Feedback** | `/hive.iterate` | Address PR review feedback on an existing feature branch. Read comments, make changes, push updates. |
 
-For code-centric work, agents also have access to `/aura.scope` (task decomposition) and `/aura.execute` (implementation via dependency-mapped subtasks).
+For task decomposition and execution, agents also have `/aur2.scope` and `/aur2.execute`.
 
 ### Human-in-the-Loop
 
-The Hive Mind strictly follows a **feature branch workflow**. Agents work on isolated branches via git worktrees, verify their own work against the knowledge base, then submit a **Pull Request**. The user reviews the PR — checking both the deliverable and the knowledge base update — before merging into `main`. No agent ever commits directly to `main`. The user is the final gatekeeper for what enters the shared mental model.
+The Hive Mind follows two operating modes:
+
+- **Manual mode** (Command Post): The user drives an agent directly, reviewing changes in real time. May commit to main.
+- **Autonomous mode** (Agent worktrees): Agents work on isolated feature branches via git worktrees, verify their own work against the knowledge base, then submit a **Pull Request**. The user reviews the PR — checking both the deliverable and the knowledge base update — before merging into `main`. The user can provide feedback via PR comments, and the agent iterates via `/hive.iterate`.
+
+See `protocols/autonomous-workflow.md` for the full lifecycle.
 
 ## Architecture
 
@@ -53,14 +59,14 @@ The architecture separates **tools** from **content** across two repositories:
 
 | Repository | Purpose | Visibility |
 |---|---|---|
-| [`ocampbell-stack/aura`](https://github.com/ocampbell-stack/aura) | Skills, templates, and scaffolding tooling. Fork of [cdimoush/aura](https://github.com/cdimoush/aura) extended with 5 `hive.*` skills. Source of truth for all skill definitions. | Public (shareable) |
-| `ocampbell-stack/hive-mind` (this repo) | The knowledge base, protocols, and fleet scripts. All context is private. Skills are deployed here via `aura init --force` and gitignored. | Private |
+| [`ocampbell-stack/aur2`](https://github.com/ocampbell-stack/aur2) | Skills, templates, and scaffolding tooling. Fork of [cdimoush/aura](https://github.com/cdimoush/aura) extended with `hive.*` skills for knowledge work. Source of truth for all skill definitions. | Public |
+| `ocampbell-stack/hive-mind` (this repo) | The knowledge base, protocols, and fleet scripts. All context is private. Skills are deployed here via `aur2 init --force --skip-settings` and gitignored. | Private |
 
 This separation means the tooling can be shared, reused, or contributed back upstream, while the knowledge base — which may contain professional team models and strategic context — remains private.
 
 ### Agent Coordination via Beads
 
-All agent coordination runs through [beads](https://github.com/steveyegge/beads), a git-native issue tracker designed for AI agents. There is no separate coordination repo or dashboard — beads provides everything natively:
+All agent coordination runs through [beads](https://github.com/steveyegge/beads), a git-native issue tracker designed for AI agents:
 
 - **Task management** — Dependency-aware issue tracking with `bd ready`, `bd create`, `bd close`
 - **Atomic claiming** — Race-safe task assignment via compare-and-swap (`bd update --claim`)
@@ -68,14 +74,12 @@ All agent coordination runs through [beads](https://github.com/steveyegge/beads)
 - **Fleet visibility** — `bd swarm status`, `bd audit`, `bd graph`
 - **Session context** — `bd prime` automatically injects task state at session start
 
-The `.beads/` database is shared across all worktrees, so every agent sees the same task state regardless of which branch they're on.
-
 ### Parallel Execution via Worktrees
 
-Each agent operates in its own git worktree — an isolated checkout of the same repository on its own branch. This enables true parallel work without file conflicts:
+Each agent operates in its own git worktree — an isolated checkout of the same repository on its own branch:
 
 ```
-~/Sandbox/agent-workspace/
+~/your-workspace/
     ├── hive-mind-main/      Command Post (user's primary window, main branch)
     ├── agent-alpha/          Worktree on agent-alpha/workspace branch
     └── agent-beta/           Worktree on agent-beta/workspace branch
@@ -104,8 +108,8 @@ This repository may contain professional models of real people — their working
 
 - **Performance-review standard**: Entries about team members must be truthful, professional, and respectful — written as if they could be read by the subject.
 - **Internal only**: Team models never appear in external deliverables. Agents use them to *inform* their work, never to *expose* the reasoning.
-- **Leak test**: Before finalizing any internal or external output, agents verify: "If this artifact was obtained by a 3rd-party, outside of the private repository, would anything be embarrassing, inappropriate, or a breach of trust?"
-- **Minimal personal information**: Agents include only what's necessary. External deliverables are scanned for extraneous personal details before submission.
+- **Leak test**: Before finalizing any output, agents verify: "If this artifact was obtained by a 3rd-party, would anything be embarrassing, inappropriate, or a breach of trust?"
+- **Minimal personal information**: Agents include only what's necessary.
 
 See [`protocols/privacy-standards.md`](protocols/privacy-standards.md) for the full policy.
 
@@ -115,7 +119,7 @@ See [`protocols/privacy-standards.md`](protocols/privacy-standards.md) for the f
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — Anthropic's CLI
 - [beads](https://github.com/steveyegge/beads) (`bd`) — Git-native issue tracking
-- [aura](https://github.com/ocampbell-stack/aura) — Skill scaffolding (our fork)
+- [aur2](https://github.com/ocampbell-stack/aur2) — Skill scaffolding
 - [GitHub CLI](https://cli.github.com/) (`gh`) — Authenticated for PR creation
 - [uv](https://github.com/astral-sh/uv) — Python package manager
 
@@ -123,28 +127,36 @@ See [`protocols/privacy-standards.md`](protocols/privacy-standards.md) for the f
 
 ```bash
 # Clone the repo
-git clone https://github.com/ocampbell-stack/hive-mind.git hive-mind-main
+git clone https://github.com/<your-username>/hive-mind.git hive-mind-main
 cd hive-mind-main
 
-# Deploy skills from aura fork
-cp .claude/settings.json .claude/settings.json.bak
-aura init --force
-cp .claude/settings.json.bak .claude/settings.json
+# Deploy skills from aur2
+aur2 init --force --skip-settings
 
 # Create agent worktrees
 ./scripts/setup-fleet.sh alpha beta
 
 # Verify
-aura check && bd ready && gh auth status
+aur2 check && bd ready && gh auth status
 ```
 
-### Your First Task
+### Assigning Tasks
 
+**Manual mode** (quick edits, real-time interaction):
 ```bash
-cd ../agent-alpha
+cd hive-mind-main
 claude
-# "Use /hive.ingest to read [your document]. Create branch feat/ingest-[topic].
-#  Update the knowledge base and INDEX.md. Submit a PR when done."
+# Work directly with the agent on main
+```
+
+**Autonomous mode** (delegated tasks with PR review):
+```bash
+cd agent-alpha
+claude
+> /hive.ingest the attached meeting notes from the Feb 12 design review
+# Agent handles: sync → branch → work → commit → PR
+# Review the PR on GitHub, leave comments for changes
+# Then: /hive.iterate #<PR-number> to address feedback
 ```
 
 ## Repository Structure
@@ -159,16 +171,18 @@ hive-mind-main/
     │   ├── compound-deliverable.md
     │   ├── pr-template.md
     │   ├── privacy-standards.md
-    │   └── verification.md
+    │   ├── verification.md
+    │   ├── autonomous-workflow.md
+    │   └── pr-feedback.md
     ├── scripts/               Fleet management utilities
     │   ├── setup-fleet.sh     Create agent worktrees
     │   ├── dashboard.sh       Query beads for fleet status
     │   └── cleanup.sh         Prune merged branches and worktrees
     ├── .beads/                Shared task database (across all worktrees)
-    ├── .aura/                 Vision capture and plan staging
+    ├── .aur2/                 Vision capture and plan staging
     └── .claude/
         ├── settings.json      SessionStart hook (bd prime + KB INDEX)
-        └── skills/            Deployed from aura fork (gitignored)
+        └── skills/            Deployed from aur2 (gitignored)
 ```
 
 ## Tooling Stack
@@ -177,6 +191,6 @@ hive-mind-main/
 |---|---|
 | [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | AI agent runtime |
 | [beads](https://github.com/steveyegge/beads) | Dependency-aware task tracking and multi-agent coordination |
-| [aura](https://github.com/ocampbell-stack/aura) (fork) | Skill definitions, templates, vision capture, task decomposition |
+| [aur2](https://github.com/ocampbell-stack/aur2) | Skill definitions, templates, vision capture, task decomposition |
 | [GitHub CLI](https://cli.github.com/) | PR creation and repo management |
 | Git worktrees | Parallel agent execution with isolated branches |

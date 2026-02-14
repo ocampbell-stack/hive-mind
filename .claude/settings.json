@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat \"$CLAUDE_PROJECT_DIR\"/.aura/AURA.md 2>/dev/null || true; bd prime 2>/dev/null || true; echo '---KB INDEX---'; cat \"$CLAUDE_PROJECT_DIR\"/knowledge-base/INDEX.md 2>/dev/null || true"
+            "command": "cat \"$CLAUDE_PROJECT_DIR\"/.aur2/AUR2.md 2>/dev/null || true; bd prime 2>/dev/null || true; echo '---KB INDEX---'; cat \"$CLAUDE_PROJECT_DIR\"/knowledge-base/INDEX.md 2>/dev/null || true"
           }
         ]
       }
