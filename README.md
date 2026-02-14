@@ -71,8 +71,7 @@ All agent coordination runs through [beads](https://github.com/steveyegge/beads)
 - **Task management** — Dependency-aware issue tracking with `bd ready`, `bd create`, `bd close`
 - **Atomic claiming** — Race-safe task assignment via compare-and-swap (`bd update --claim`)
 - **Inter-agent context passing** — `bd comments add` records what was done, key decisions, and files changed on each bead. The next agent reads this context via `bd show <id>` before starting work. This is the primary mechanism for knowledge transfer between agents.
-- **Inter-agent messaging** — `bd mail` for agent-to-agent communication
-- **Fleet visibility** — `bd swarm status`, `bd audit`, `bd graph`
+- **Fleet visibility** — `bd status`, `bd blocked`, `bd graph`
 - **Session context** — `bd prime` automatically injects task state at session start
 - **Complexity escalation** — Single-session tasks run as one bead. Multi-session work is decomposed via `/aur2.scope` into a dependency graph of beads, then executed via `/aur2.execute`. The scope skill selects from domain-appropriate templates (`knowledge-project.md` or `research.md` for KB work, `feature.md` or `bug.md` for code)
 
@@ -232,6 +231,8 @@ claude
 
 ### What's Next?
 
+See [`docs/operations.md`](docs/operations.md) for the full day-to-day operations guide — fleet monitoring, beads triage, multi-agent coordination, and PR review workflow.
+
 Once your instance is running, try these first tasks:
 
 1. **Ingest context**: `/hive.ingest` some notes about your role, current projects, or team
@@ -245,6 +246,8 @@ Once your instance is running, try these first tasks:
 hive-mind-main/
     ├── CLAUDE.md              Agent operating instructions (loaded every session)
     ├── AGENTS.md              Beads task management guide
+    ├── docs/
+    │   └── operations.md      Day-to-day fleet management guide
     ├── knowledge-base/        The persistent mental model
     │   └── INDEX.md           Master index with staleness tracking
     ├── protocols/             Detailed agent workflow standards

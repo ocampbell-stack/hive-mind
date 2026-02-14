@@ -51,5 +51,5 @@ Run these four checks before marking any task complete:
 ## Completion
 Only after all three outputs are produced and verification passes:
 1. Commit changes to feature branch
-2. Create PR via `gh pr create`
-3. Close the beads task: `bd close <id> --reason "summary"`
+2. Create PR via `gh pr create` — include any follow-up beads created during work in the "Follow-up Work" section of the PR description (see `protocols/pr-template.md`)
+3. Close the beads task: `bd close <id> --reason "summary" --suggest-next`

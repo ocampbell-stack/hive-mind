@@ -23,6 +23,10 @@ Brief description of what this PR accomplishes.
 - Task ID: `<bead-id>`
 - Status: Closed with reason
 
+## Follow-up Work
+- Beads created during this work: `<bead-id>: <title>` (or "None")
+- Run `bd ready` to see newly unblocked tasks
+
 ## Notes
 Any additional context for the reviewer.
 ```

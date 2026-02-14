@@ -60,8 +60,8 @@ Every task — whether triggered by `bd ready` or a direct user request — foll
 - Link PR: `bd comments add <id> "PR: <url>"`
 - Complete: `bd close <id> --reason "summary" --suggest-next`
 - Create follow-up: `bd create "Follow up: description" -t task`
-- Message agent: `bd mail`
-- Fleet status: `bd swarm status`
+- Fleet status: `bd status`
+- Blocked work: `bd blocked`
 - Visualize dependencies: `bd graph --all --compact`
 
 ## Skills

@@ -79,7 +79,7 @@ Execute the invoked skill's instructions. The compound deliverable protocol alwa
 When operating as Command Post (the user's primary window):
 - Skip branching steps unless the user explicitly requests a feature branch
 - The user may commit directly to main — follow their lead
-- Beads tracking is optional — use it if the user wants visibility
+- Beads tracking still applies — skills create/claim beads in all modes. This keeps a consistent record of work regardless of who is driving.
 - Compound deliverable protocol still applies (always update KB)
 
 ## Post-Merge Cleanup
