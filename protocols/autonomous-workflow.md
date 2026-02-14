@@ -55,8 +55,9 @@ Execute the invoked skill's instructions. The compound deliverable protocol alwa
    ```
    Multiple commits are fine for larger tasks — commit logical units of work.
 
-2. **Push** to remote:
+2. **Sync beads and push** to remote:
    ```bash
+   bd sync
    gh auth setup-git
    git push -u origin feat/{agent-name}/{task-description}
    ```

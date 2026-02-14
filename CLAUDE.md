@@ -41,6 +41,8 @@ Every task produces THREE outputs:
 
 Every skill follows a standard beads lifecycle. Beads is the single source of truth for what work is happening, who's doing it, and what was learned.
 
+> **Precedence**: `bd prime` injects generic beads guidance at session start. For session completion, **follow `protocols/autonomous-workflow.md` instead** — it includes PR creation, compound deliverable verification, and hive-mind-specific steps that the generic protocol omits.
+
 ### Bead Lifecycle
 
 Every task — whether triggered by `bd ready` or a direct user request — follows this cycle:
