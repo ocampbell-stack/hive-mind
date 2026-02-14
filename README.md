@@ -2,7 +2,7 @@
 
 A persistent, version-controlled knowledge base managed by parallel AI agents. The Hive Mind treats the user's mental model of their work as a living repository — strategic context, project state, team dynamics, and work products — maintained and extended by a fleet of Claude Code agents operating through git worktrees.
 
-> **This is a private repository.** It may contain models of team members and sensitive strategic context. See [Privacy & Professionalism](#privacy--professionalism) below.
+> **Your instance should be private.** It will contain models of team members and sensitive strategic context. See [Privacy & Professionalism](#privacy--professionalism) below.
 
 ## The Vision
 
@@ -60,7 +60,7 @@ The architecture separates **tools** from **content** across two repositories:
 | Repository | Purpose | Visibility |
 |---|---|---|
 | [`ocampbell-stack/aur2`](https://github.com/ocampbell-stack/aur2) | Skills, templates, and scaffolding tooling. Fork of [cdimoush/aura](https://github.com/cdimoush/aura) extended with `hive.*` skills for knowledge work. Source of truth for all skill definitions. | Public |
-| `ocampbell-stack/hive-mind` (this repo) | The knowledge base, protocols, and fleet scripts. All context is private. Skills are deployed here via `aur2 init --force --skip-settings` and gitignored. | Private |
+| Your private instance (created from this template) | The knowledge base, protocols, and fleet scripts. All context is private. Skills are deployed here via `aur2 init --force --skip-settings` and gitignored. | Private |
 
 This separation means the tooling can be shared, reused, or contributed back upstream, while the knowledge base — which may contain professional team models and strategic context — remains private.
 
@@ -123,12 +123,24 @@ See [`protocols/privacy-standards.md`](protocols/privacy-standards.md) for the f
 - [GitHub CLI](https://cli.github.com/) (`gh`) — Authenticated for PR creation
 - [uv](https://github.com/astral-sh/uv) — Python package manager
 
+### Create Your Instance
+
+This repo is a **GitHub template**. Create your own private instance:
+
+```bash
+# Create a private instance from the template
+gh repo create my-hive-mind --template ocampbell-stack/hive-mind --private --clone
+cd my-hive-mind
+```
+
+Or click **"Use this template"** on GitHub and select **Private**.
+
 ### Setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/<your-username>/hive-mind.git hive-mind-main
-cd hive-mind-main
+# Install aur2 (if not already installed)
+git clone https://github.com/ocampbell-stack/aur2.git ~/aur2
+cd ~/aur2 && uv venv && uv pip install -e . && cd -
 
 # Deploy skills from aur2
 aur2 init --force --skip-settings
