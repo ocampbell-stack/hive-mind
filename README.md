@@ -40,7 +40,7 @@ Agents in this fleet execute specific workflows, each backed by a dedicated Clau
 | **Maintain the Fleet** | `/hive.maintain` | Improve the Hive Mind's own tooling, scripts, skills, and infrastructure. The system maintains itself. |
 | **Iterate on Feedback** | `/hive.iterate` | Address PR review feedback on an existing feature branch. Read comments, make changes, push updates. |
 
-For task decomposition and execution, agents also have `/aur2.scope` and `/aur2.execute`.
+For task decomposition and execution, agents also have `/aur2.scope` and `/aur2.execute`. These skills are domain-aware — they detect whether they're operating in a codebase or knowledge base and select the appropriate template and research strategy, so escalation from any `hive.*` skill works seamlessly.
 
 ### Human-in-the-Loop
 
@@ -59,7 +59,7 @@ The architecture separates **tools** from **content** across two repositories:
 
 | Repository | Purpose | Visibility |
 |---|---|---|
-| [`ocampbell-stack/aur2`](https://github.com/ocampbell-stack/aur2) | Skills, templates, and scaffolding tooling. Fork of [cdimoush/aura](https://github.com/cdimoush/aura) extended with `hive.*` skills for knowledge work. Source of truth for all skill definitions. | Public |
+| [`ocampbell-stack/aur2`](https://github.com/ocampbell-stack/aur2) | Skills, templates, and scaffolding tooling. Fork of [cdimoush/aura](https://github.com/cdimoush/aura) with domain-aware scope/execute and `hive.*` skills for knowledge work. Source of truth for all skill definitions. | Public |
 | Your private instance (created from this template) | The knowledge base, protocols, and fleet scripts. All context is private. Skills are deployed here via `aur2 init --force --skip-settings` and gitignored. | Private |
 
 This separation means the tooling can be shared, reused, or contributed back upstream, while the knowledge base — which may contain professional team models and strategic context — remains private.
@@ -74,7 +74,7 @@ All agent coordination runs through [beads](https://github.com/steveyegge/beads)
 - **Inter-agent messaging** — `bd mail` for agent-to-agent communication
 - **Fleet visibility** — `bd swarm status`, `bd audit`, `bd graph`
 - **Session context** — `bd prime` automatically injects task state at session start
-- **Complexity escalation** — Single-session tasks run as one bead. Multi-session work is decomposed via `/aur2.scope` into a dependency graph of beads, then executed via `/aur2.execute`
+- **Complexity escalation** — Single-session tasks run as one bead. Multi-session work is decomposed via `/aur2.scope` into a dependency graph of beads, then executed via `/aur2.execute`. The scope skill selects from domain-appropriate templates (`knowledge-project.md` or `research.md` for KB work, `feature.md` or `bug.md` for code)
 
 #### Bead Lifecycle in Skills
 
