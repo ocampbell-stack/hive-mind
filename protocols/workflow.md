@@ -167,12 +167,17 @@ When iterating on review comments (typically via `/hive.iterate`):
 
 ## Post-Merge Cleanup
 
-After a PR merges:
+After merging a PR via the GitHub web UI, run from Command Post:
+
 ```bash
-git checkout {agent-name}/workspace
-git branch -d feat/{agent-name}/{task-description}
-git fetch origin
-git rebase origin/main
+# Single agent
+./scripts/cleanup.sh alpha
+
+# All agents at once
+./scripts/cleanup.sh --all
+
+# Preview first
+./scripts/cleanup.sh --dry-run alpha
 ```
 
-Or run `scripts/cleanup.sh` from Command Post to batch-clean all merged branches.
+This fetches origin, fast-forwards local main, switches the worktree back to its workspace branch, rebases onto main, and deletes merged feature branches. Remote feature branches are auto-deleted by GitHub on merge.

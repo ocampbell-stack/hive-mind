@@ -189,9 +189,13 @@ Agents seek alignment with you **before** implementation (via `AskUserQuestion` 
 # From Command Post — see all open PRs
 gh pr list
 
-# After merging, clean up
-./scripts/cleanup.sh        # Prune merged branches
+# After merging a PR, clean up the agent's worktree
+./scripts/cleanup.sh alpha          # Reset agent-alpha: fetch, update main, rebase workspace, delete merged branches
+./scripts/cleanup.sh --all          # Reset all agents
+./scripts/cleanup.sh --dry-run alpha  # Preview what would happen
 ```
+
+Remote feature branches are auto-deleted by GitHub on merge.
 
 ## Common Operations
 
@@ -236,10 +240,14 @@ python .aur2/scripts/record_memo.py
 > /aur2.execute .aur2/plans/queue/<name>/scope.md
 ```
 
-### Cleaning Up
+### Post-Merge Cleanup
+
+After merging a PR via the GitHub web UI, run from Command Post:
 
 ```bash
-# From Command Post
-./scripts/cleanup.sh          # Prune merged branches and stale worktrees
-./scripts/cleanup.sh --dry-run  # Preview what would be cleaned
+./scripts/cleanup.sh alpha          # Single agent: fetch, update main, rebase workspace, delete merged branches
+./scripts/cleanup.sh --all          # All agents at once
+./scripts/cleanup.sh --dry-run alpha  # Preview first
 ```
+
+This handles everything: fetching origin, fast-forwarding local main, switching the worktree back to its workspace branch, rebasing onto main, and deleting merged local feature branches. Remote feature branches are auto-deleted by GitHub on merge.

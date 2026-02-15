@@ -108,7 +108,7 @@ Each agent operates in its own git worktree — an isolated checkout of the same
     └── agent-beta/           Worktree on agent-beta/workspace branch
 ```
 
-Agents resolve their identity from their working directory path. Worktrees are created via `scripts/setup-fleet.sh` and cleaned up via `scripts/cleanup.sh`.
+Agents resolve their identity from their working directory path. Worktrees are created via `scripts/setup-fleet.sh`. After merging a PR, run `scripts/cleanup.sh <agent>` (or `--all`) from Command Post to reset worktrees and clean up branches.
 
 ### Knowledge Base
 
@@ -263,7 +263,7 @@ hive-mind-main/
     ├── scripts/               Fleet management utilities
     │   ├── setup-fleet.sh     Create agent worktrees
     │   ├── dashboard.sh       Query beads for fleet status
-    │   └── cleanup.sh         Prune merged branches and worktrees
+    │   └── cleanup.sh         Post-merge cleanup (reset worktrees, delete merged branches)
     ├── .beads/                Shared task database (across all worktrees)
     ├── .aur2/                 Vision capture and plan staging
     └── .claude/
