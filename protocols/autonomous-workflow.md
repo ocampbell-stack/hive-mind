@@ -41,10 +41,17 @@ Determine your operating mode from the working directory:
 
 ### Doing the Work
 
-Execute the invoked skill's instructions. The compound deliverable protocol always applies:
-1. Produce the requested deliverable
-2. Update `knowledge-base/` with learnings; update `INDEX.md`
-3. Run verification checks (fidelity, coherence, privacy, professionalism)
+1. **Preliminary alignment** — Follow `protocols/preliminary-alignment.md`:
+   - Gather context from the KB relevant to the task
+   - Assess what will change and surface any ambiguities
+   - For high-impact or ambiguous work: use `AskUserQuestion` to confirm approach before making changes
+   - For clear, narrowly-scoped tasks: state your plan and proceed
+   - When in doubt, pause — the cost of asking is always lower than the cost of rework
+
+2. **Execute** the invoked skill's instructions. The compound deliverable protocol always applies:
+   - Produce the requested deliverable
+   - Update `knowledge-base/` with learnings; update `INDEX.md`
+   - Run verification checks (fidelity, coherence, privacy, professionalism)
 
 ### After Completing Work
 

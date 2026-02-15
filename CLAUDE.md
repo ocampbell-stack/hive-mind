@@ -20,6 +20,18 @@ Your mode is determined by your identity:
 
 Read and follow `protocols/autonomous-workflow.md` for the complete autonomous lifecycle.
 
+## Core Principle: Preliminary Alignment
+
+Before making changes, explore relevant context and confirm your approach with the user.
+
+1. **Gather context** — Consult `knowledge-base/INDEX.md` and read relevant KB files
+2. **Assess impact** — Identify what will change, surface ambiguities and assumptions
+3. **Seek alignment** — Present your proposed approach; get confirmation before editing
+
+This applies to all skills that make changes. When in doubt, pause and ask — the cost of asking is always lower than the cost of rework.
+
+@protocols/preliminary-alignment.md
+
 ## Core Principle: Compound Deliverables
 
 Every task produces THREE outputs:
