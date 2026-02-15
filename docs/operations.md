@@ -251,3 +251,15 @@ After merging a PR via the GitHub web UI, run from Command Post:
 ```
 
 This handles everything: fetching origin, fast-forwarding local main, switching the worktree back to its workspace branch, rebasing onto main, and deleting merged local feature branches. Remote feature branches are auto-deleted by GitHub on merge.
+
+### Syncing to the Public Template
+
+When you change shared infra (protocols, scripts, docs, CLAUDE.md, README, etc.) in your private instance and want to push those changes to the public hive-mind template:
+
+```bash
+./scripts/sync-template.sh              # Diff, copy, commit, and push
+./scripts/sync-template.sh --dry-run    # Preview what would change
+./scripts/sync-template.sh --diff       # Show file-level diff only
+```
+
+The script syncs a defined set of shared paths — private content (knowledge-base, .beads, team models) is never copied. The shared paths are listed in the `SHARED_PATHS` array at the top of the script. If you add new shared infra files, add them to the manifest.
