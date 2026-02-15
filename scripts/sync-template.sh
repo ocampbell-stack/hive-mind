@@ -145,7 +145,10 @@ fi
 
 # --- Copy ---
 echo "--- Copying files ---"
-for file in "${CHANGED[@]}" "${NEW[@]}"; do
+ALL_SYNCED=()
+[[ ${#CHANGED[@]} -gt 0 ]] && ALL_SYNCED+=("${CHANGED[@]}")
+[[ ${#NEW[@]} -gt 0 ]] && ALL_SYNCED+=("${NEW[@]}")
+for file in "${ALL_SYNCED[@]}"; do
     dst="$PUBLIC_DIR/$file"
     mkdir -p "$(dirname "$dst")"
     cp "$PRIVATE_DIR/$file" "$dst"
@@ -168,13 +171,20 @@ if [[ ${#NEW[@]} -gt 0 ]]; then
     SUMMARY+="${#NEW[@]} new"
 fi
 
+# Build file list for commit body
+FILE_LIST=""
+if [[ ${#CHANGED[@]} -gt 0 ]]; then
+    for f in "${CHANGED[@]}"; do FILE_LIST+="  M $f"$'\n'; done
+fi
+if [[ ${#NEW[@]} -gt 0 ]]; then
+    for f in "${NEW[@]}"; do FILE_LIST+="  A $f"$'\n'; done
+fi
+
 git commit -m "$(cat <<EOF
 Sync shared infra from private instance ($SUMMARY)
 
 Files synced:
-$(for f in "${CHANGED[@]}"; do echo "  M $f"; done)
-$(for f in "${NEW[@]}"; do echo "  A $f"; done)
-
+$FILE_LIST
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 EOF
 )"

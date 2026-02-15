@@ -59,16 +59,23 @@ See `protocols/alignment.md` for the alignment protocol and `protocols/workflow.
 
 ## Architecture
 
-### Two-Repo Model
+### Repo Model
 
-The architecture separates **tools** from **content** across two repositories:
+The architecture separates three concerns across two repositories:
 
-| Repository | Purpose | Visibility |
+| Repository | Content | Visibility |
 |---|---|---|
-| [`ocampbell-stack/aur2`](https://github.com/ocampbell-stack/aur2) | Skills, templates, and scaffolding tooling. Fork of [cdimoush/aura](https://github.com/cdimoush/aura) with domain-aware scope/execute and `hive.*` skills for knowledge work. Source of truth for all skill definitions. | Public |
-| Your private instance (created from this template) | The knowledge base, protocols, and fleet scripts. All context is private. Skills are deployed here via `aur2 init --force --skip-settings` and gitignored. | Private |
+| [`ocampbell-stack/aur2`](https://github.com/ocampbell-stack/aur2) | Skills, templates, and scaffolding tooling | Public |
+| [`ocampbell-stack/hive-mind`](https://github.com/ocampbell-stack/hive-mind) (this template) | Shared infrastructure: protocols, scripts, docs, CLAUDE.md, README | Public |
+| Your private instance (created from this template) | Everything above + private knowledge base, team models, beads state | Private |
 
-This separation means the tooling can be shared, reused, or contributed back upstream, while the knowledge base — which may contain professional team models and strategic context — remains private.
+The private instance contains all the shared infra from the template **plus** private content. Changes flow in one direction:
+
+```
+Private instance  ──sync-template.sh──▶  Public template
+```
+
+The `scripts/sync-template.sh` script copies only the shared infrastructure paths (protocols, scripts, docs, config) — private content (knowledge-base, .beads, team models) is never synced. See [Maintenance](#maintenance) below.
 
 ### Agent Coordination via Beads
 
@@ -247,6 +254,46 @@ Once your instance is running, try these first tasks:
 3. **Groom**: `/hive.groom` to audit the KB for gaps
 4. **Produce a deliverable**: `/hive.deliver` a document grounded in your KB context
 
+## Maintenance
+
+### After Merging a PR
+
+When you merge an agent's PR via the GitHub web UI, run from Command Post:
+
+```bash
+./scripts/cleanup.sh alpha          # Single agent
+./scripts/cleanup.sh --all          # All agents
+./scripts/cleanup.sh --dry-run alpha  # Preview first
+```
+
+This fetches origin, fast-forwards local main, switches the agent's worktree back to its workspace branch, rebases onto main, and deletes merged local feature branches. Remote feature branches are auto-deleted by GitHub on merge.
+
+### After Changing Shared Infrastructure
+
+When you modify protocols, scripts, docs, CLAUDE.md, README, or other shared infra in your private instance and want to update the public template:
+
+```bash
+./scripts/sync-template.sh              # Diff, copy, commit, and push to public template
+./scripts/sync-template.sh --dry-run    # Preview what would change
+./scripts/sync-template.sh --diff       # Show file-level diff only
+```
+
+The synced paths are defined in the `SHARED_PATHS` array at the top of the script. If you add new shared infra files, add them to the manifest. Private content (knowledge-base, .beads, team models) is never synced.
+
+### Typical Post-Task Workflow
+
+After an agent completes a task and you merge the PR:
+
+```bash
+# 1. Clean up the agent's worktree
+./scripts/cleanup.sh alpha
+
+# 2. If the task changed shared infra, sync to public template
+./scripts/sync-template.sh
+```
+
+That's it — two commands at most. If the task only changed private content (KB files, team models), skip step 2.
+
 ## Repository Structure
 
 ```
@@ -263,7 +310,8 @@ hive-mind-main/
     ├── scripts/               Fleet management utilities
     │   ├── setup-fleet.sh     Create agent worktrees
     │   ├── dashboard.sh       Query beads for fleet status
-    │   └── cleanup.sh         Post-merge cleanup (reset worktrees, delete merged branches)
+    │   ├── cleanup.sh         Post-merge cleanup (reset worktrees, delete merged branches)
+    │   └── sync-template.sh   Sync shared infra to public template repo
     ├── .beads/                Shared task database (across all worktrees)
     ├── .aur2/                 Vision capture and plan staging
     └── .claude/
