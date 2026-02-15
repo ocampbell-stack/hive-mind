@@ -74,7 +74,6 @@ Every task — whether triggered by `bd ready` or a direct user request — foll
 | `/hive.groom` | Audit KB for staleness/gaps |
 | `/hive.deliver` | Produce external deliverables |
 | `/hive.advise` | Analyze comms, recommend actions |
-| `/hive.maintain` | Improve fleet tooling |
 | `/hive.iterate` | Address PR review feedback |
 | `/aur2.scope` | Decompose complex tasks into phased plans |
 | `/aur2.execute` | Execute scoped task plans via beads |

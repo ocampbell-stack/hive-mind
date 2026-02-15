@@ -37,7 +37,6 @@ Agents in this fleet execute specific workflows, each backed by a dedicated Clau
 | **Groom the Mental Model** | `/hive.groom` | Proactively audit the knowledge base for stale information, contradictions between entries, and gaps where referenced topics lack documentation. Surface questions for the user to resolve ambiguities. |
 | **Produce Deliverables** | `/hive.deliver` | Generate stakeholder-facing outputs — documents, code, plans, analyses — grounded in the current state of the knowledge base. Every claim traceable to a KB source. |
 | **Recommend Engagement** | `/hive.advise` | Analyze meeting minutes, chat threads, or communications and recommend specific actions: feedback to give, questions to ask, risks to flag. Informed by team models and project context but never exposing internal assessments. |
-| **Maintain the Fleet** | `/hive.maintain` | Improve the Hive Mind's own tooling, scripts, skills, and infrastructure. The system maintains itself. |
 | **Iterate on Feedback** | `/hive.iterate` | Address PR review feedback on an existing feature branch. Read comments, make changes, push updates. |
 
 For task decomposition and execution, agents also have `/aur2.scope` and `/aur2.execute`. These skills are domain-aware — they detect whether they're operating in a codebase or knowledge base and select the appropriate template and research strategy, so escalation from any `hive.*` skill works seamlessly.
