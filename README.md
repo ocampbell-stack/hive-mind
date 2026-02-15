@@ -18,14 +18,15 @@ This repository is the shared memory that all agents read from and write to. Whe
 
 ### The Compound Deliverable Principle
 
-Every task assigned to an agent has two required outputs:
+Every substantive task assigned to an agent produces up to three outputs:
 
 1. **The External Deliverable** — The actual work product requested: code, a document, an analysis, a recommendation.
-2. **The Internal Context Update** — A distinct update to the Hive Mind knowledge base reflecting what the agent learned or what changed.
+2. **The Internal Context Update** — An update to the Hive Mind knowledge base reflecting what the agent learned or what changed.
+3. **Verification** — Checks that the deliverable is faithful to the assignment, consistent with existing knowledge, and compliant with privacy standards.
 
 The rationale: we must assume the *next* agent will need to know what this agent just learned. By encoding this "mental model update" into the repo with every task, we eliminate the need to manually re-paste context for future work. The knowledge base compounds over time — each task leaves the system smarter than it found it.
 
-A third component, **Verification**, ensures that deliverables are faithful to the assignment, consistent with existing knowledge, and compliant with privacy standards. See [`protocols/`](protocols/) for the full verification framework.
+Task weight determines rigor: substantive work requires all three outputs, while light tasks (small fixes, iterations) require only the deliverable and a privacy scan. See [`protocols/quality.md`](protocols/quality.md) for the full framework.
 
 ### Agent Workflows
 
