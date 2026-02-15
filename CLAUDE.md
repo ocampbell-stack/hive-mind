@@ -18,7 +18,7 @@ Your mode is determined by your identity:
 - **Command Post** → **Manual mode**: Work directly on main or use feature branches at the user's discretion. You are the user's hands — they review in real time.
 - **Agent worktrees** → **Autonomous mode**: Full branching lifecycle required. Create feature branch, do work, submit PR, wait for review.
 
-Read and follow `protocols/autonomous-workflow.md` for the complete autonomous lifecycle.
+@protocols/workflow.md
 
 ## Core Principle: Preliminary Alignment
 
@@ -30,16 +30,16 @@ Before making changes, explore relevant context and confirm your approach with t
 
 This applies to all skills that make changes. When in doubt, pause and ask — the cost of asking is always lower than the cost of rework.
 
-@protocols/preliminary-alignment.md
+@protocols/alignment.md
 
-## Core Principle: Compound Deliverables
+## Core Principle: Quality Gates
 
-Every task produces THREE outputs:
-1. **Deliverable** - The requested work product
-2. **KB Update** - Update `knowledge-base/` with learnings; update `INDEX.md`
-3. **Verification** - Fidelity, coherence, privacy, professionalism checks
+Every task passes through quality checks before completion. Task weight determines rigor:
 
-@protocols/compound-deliverable.md
+- **Full tasks** (substantive work): Deliverable + KB update + full verification checklist
+- **Light tasks** (small fixes, iterations): Deliverable + privacy scan only
+
+@protocols/quality.md
 
 ## Knowledge Base
 
@@ -51,9 +51,9 @@ Every task produces THREE outputs:
 
 ## Task Management (Beads)
 
-Every skill follows a standard beads lifecycle. Beads is the single source of truth for what work is happening, who's doing it, and what was learned.
+Every skill follows a standard lifecycle. Beads is the single source of truth for what work is happening, who's doing it, and what was learned.
 
-> **Precedence**: `bd prime` injects generic beads guidance at session start. For session completion, **follow `protocols/autonomous-workflow.md` instead** — it includes PR creation, compound deliverable verification, and hive-mind-specific steps that the generic protocol omits.
+> **Precedence**: `bd prime` injects generic beads guidance at session start. For session completion, **follow `protocols/workflow.md` instead** — it includes PR creation, quality verification, and hive-mind-specific steps that the generic protocol omits.
 
 ### Bead Lifecycle
 
@@ -107,11 +107,5 @@ The `--skip-settings` flag preserves this repo's custom SessionStart hook. Do NO
 - **Autonomous mode**: NEVER commit to `main`. Always use feature branches named `feat/{agent-name}/{description}`.
 - **Manual mode**: User may commit to `main` directly. Follow the user's lead.
 - Always sync workspace branch before creating feature branches: `git fetch origin && git rebase origin/main`
-- Submit PRs via `gh pr create --base main` using the PR template.
+- Submit PRs via `gh pr create --base main` using the PR format in `protocols/workflow.md`.
 - Only the user merges after review.
-
-@protocols/pr-template.md
-
-## Privacy & Professionalism
-
-@protocols/privacy-standards.md

@@ -54,7 +54,7 @@ These checkpoints apply across two operating modes:
 - **Manual mode** (Command Post): The user drives an agent directly, reviewing changes in real time. May commit to main.
 - **Autonomous mode** (Agent worktrees): Full branching lifecycle required. Create feature branch, do work, submit PR, wait for review.
 
-See `protocols/preliminary-alignment.md` for the alignment protocol and `protocols/autonomous-workflow.md` for the full lifecycle.
+See `protocols/alignment.md` for the alignment protocol and `protocols/workflow.md` for the full lifecycle.
 
 ## Architecture
 
@@ -89,7 +89,7 @@ Setup → Align → Work → Record → Close
 ```
 
 1. **Setup** — Claim an existing bead or create a new one. Read prior context via `bd show`.
-2. **Align** — Gather relevant KB context, assess impact, and confirm approach with the user before making changes. See `protocols/preliminary-alignment.md`.
+2. **Align** — Gather relevant KB context, assess impact, and confirm approach with the user before making changes. See `protocols/alignment.md`.
 3. **Work** — Execute the skill's core instructions.
 4. **Record** — `bd comments add` with a structured summary (what was done, decisions, files changed).
 5. **Close** — `bd close --reason "summary" --suggest-next` to complete and surface newly unblocked work.
@@ -133,7 +133,7 @@ This repository may contain professional models of real people — their working
 - **Leak test**: Before finalizing any output, agents verify: "If this artifact was obtained by a 3rd-party, would anything be embarrassing, inappropriate, or a breach of trust?"
 - **Minimal personal information**: Agents include only what's necessary.
 
-See [`protocols/privacy-standards.md`](protocols/privacy-standards.md) for the full policy.
+See [`protocols/quality.md`](protocols/quality.md) for the full policy.
 
 ## Getting Started
 
@@ -251,19 +251,15 @@ Once your instance is running, try these first tasks:
 ```
 hive-mind-main/
     ├── CLAUDE.md              Agent operating instructions (loaded every session)
-    ├── AGENTS.md              Beads task management guide
     ├── docs/
     │   └── operations.md      Day-to-day fleet management guide
     ├── knowledge-base/        The persistent mental model
     │   └── INDEX.md           Master index with staleness tracking
     ├── protocols/             Detailed agent workflow standards
-    │   ├── preliminary-alignment.md
-    │   ├── compound-deliverable.md
-    │   ├── pr-template.md
-    │   ├── privacy-standards.md
-    │   ├── verification.md
-    │   ├── autonomous-workflow.md
-    │   └── pr-feedback.md
+    │   ├── alignment.md       Pre-implementation alignment protocol
+    │   ├── quality.md         Verification, privacy, and deliverable standards
+    │   ├── workflow.md        Mode detection, branching, PR lifecycle
+    │   └── skill-lifecycle.md Common hive.* skill setup/closeout pattern
     ├── scripts/               Fleet management utilities
     │   ├── setup-fleet.sh     Create agent worktrees
     │   ├── dashboard.sh       Query beads for fleet status
