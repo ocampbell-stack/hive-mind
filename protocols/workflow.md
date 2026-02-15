@@ -72,9 +72,8 @@ Follow `protocols/quality.md`:
    ```
    Multiple commits are fine for larger tasks — commit logical units of work.
 
-2. **Sync and push**:
+2. **Push**:
    ```bash
-   bd sync
    gh auth setup-git
    git push -u origin feat/{agent-name}/{task-description}
    ```
