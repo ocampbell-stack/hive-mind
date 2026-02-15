@@ -116,7 +116,7 @@ bd close <id> --reason "No longer needed — superseded by <id>"
 
 ## Monitoring Multi-Bead Projects
 
-When `/aur2.scope` + `/aur2.execute` decompose work into a bead graph, an **epic** bead is created as a parent container for all the scope's tasks. This gives you a single ID to track progress.
+When `/aur2.execute` implements a scope, an **epic** bead is created as a parent container for all the scope's tasks. This gives you a single ID to track progress. (The scope itself is produced by `/aur2.scope` and submitted as a PR for your review before execution begins.)
 
 ### Checking Scope Progress
 
@@ -221,9 +221,16 @@ python .aur2/scripts/record_memo.py
 ### Planning Complex Work
 
 ```bash
+# Step 1: Produce the scope (agent submits as PR in autonomous mode)
 > /aur2.scope "Restructure KB to add competitive analysis section"
-# Review the scope file at .aur2/plans/queue/<name>/scope.md
-# Then execute:
+# → Creates .aur2/plans/queue/<name>/scope.md
+# → In autonomous mode: submits scope as PR for your review
+
+# Step 2: Review the scope PR on GitHub
+# → Leave comments if changes needed → agent iterates via /hive.iterate
+# → Approve when satisfied
+
+# Step 3: Execute the approved scope (separate session/invocation)
 > /aur2.execute .aur2/plans/queue/<name>/scope.md
 ```
 

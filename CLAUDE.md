@@ -48,7 +48,7 @@ Every skill follows a standard beads lifecycle. Beads is the single source of tr
 Every task — whether triggered by `bd ready` or a direct user request — follows this cycle:
 
 1. **Setup**: Claim an existing bead (`bd update <id> --claim`) or create one (`bd create "Skill: description" -t task`). Read context from prior agents: `bd show <id>`.
-2. **Work**: Execute the skill's instructions. For complex multi-session work, escalate to `/aur2.scope` + `/aur2.execute` instead of doing everything in one shot.
+2. **Work**: Execute the skill's instructions. For complex multi-session work, escalate to `/aur2.scope` to produce a scope PR for user review. Close the current bead with a note pointing to the scope. `/aur2.execute` is invoked separately after the user approves the scope.
 3. **Record**: Leave context for the next agent via `bd comments add <id> "What was done. Key decisions. Files changed."` — this is the primary inter-agent knowledge transfer mechanism.
 4. **Close**: `bd close <id> --reason "concise summary" --suggest-next` — the reason becomes the bead's permanent record; `--suggest-next` shows newly unblocked work.
 
@@ -78,7 +78,7 @@ Every task — whether triggered by `bd ready` or a direct user request — foll
 | `/aur2.scope` | Decompose complex tasks into phased plans |
 | `/aur2.execute` | Execute scoped task plans via beads |
 
-All skills have `disable-model-invocation: false` and full `allowed-tools` access. This means you CAN and SHOULD invoke `/aur2.scope` and `/aur2.execute` directly when a `hive.*` skill's complexity check calls for escalation — don't ask the user to type it. Branch isolation and PR review are the safety mechanisms, not tool or invocation restrictions.
+All skills have `disable-model-invocation: false` and full `allowed-tools` access. This means you CAN and SHOULD invoke `/aur2.scope` directly when a `hive.*` skill's complexity check calls for escalation — don't ask the user to type it. The scope skill produces a scope PR for user review; `/aur2.execute` is invoked **separately** after the user approves the scope. Branch isolation and PR review are the safety mechanisms, not tool or invocation restrictions.
 
 ## Skill Deployment
 

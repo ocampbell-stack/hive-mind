@@ -39,7 +39,7 @@ Agents in this fleet execute specific workflows, each backed by a dedicated Clau
 | **Recommend Engagement** | `/hive.advise` | Analyze meeting minutes, chat threads, or communications and recommend specific actions: feedback to give, questions to ask, risks to flag. Informed by team models and project context but never exposing internal assessments. |
 | **Iterate on Feedback** | `/hive.iterate` | Address PR review feedback on an existing feature branch. Read comments, make changes, push updates. |
 
-For task decomposition and execution, agents also have `/aur2.scope` and `/aur2.execute`. These skills are domain-aware — they detect whether they're operating in a codebase or knowledge base and select the appropriate template and research strategy, so escalation from any `hive.*` skill works seamlessly.
+For task decomposition, agents also have `/aur2.scope` and `/aur2.execute`. When a task is too complex for a single session, the agent escalates to `/aur2.scope`, which produces a work breakdown and submits it as a PR for user review. After the user approves, `/aur2.execute` is invoked separately to create beads and implement the work. Both skills are domain-aware — they detect whether they're operating in a codebase or knowledge base and select the appropriate template and research strategy.
 
 ### Human-in-the-Loop
 
@@ -72,7 +72,7 @@ All agent coordination runs through [beads](https://github.com/steveyegge/beads)
 - **Inter-agent context passing** — `bd comments add` records what was done, key decisions, and files changed on each bead. The next agent reads this context via `bd show <id>` before starting work. This is the primary mechanism for knowledge transfer between agents.
 - **Fleet visibility** — `bd status`, `bd blocked`, `bd graph`
 - **Session context** — `bd prime` automatically injects task state at session start
-- **Complexity escalation** — Single-session tasks run as one bead. Multi-session work is decomposed via `/aur2.scope` into a dependency graph of beads, then executed via `/aur2.execute`. The scope skill selects from domain-appropriate templates (`knowledge-project.md` or `research.md` for KB work, `feature.md` or `bug.md` for code)
+- **Complexity escalation** — Single-session tasks run as one bead. Multi-session work is escalated to `/aur2.scope`, which produces a work breakdown and submits it as a PR for user review. After approval, `/aur2.execute` creates a dependency graph of beads and implements the work. The scope skill selects from domain-appropriate templates (`knowledge-project.md` or `research.md` for KB work, `feature.md` or `bug.md` for code)
 
 #### Bead Lifecycle in Skills
 
