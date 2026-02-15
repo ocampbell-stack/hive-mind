@@ -51,18 +51,9 @@ Every task passes through quality checks before completion. Task weight determin
 
 ## Task Management (Beads)
 
-Every skill follows a standard lifecycle. Beads is the single source of truth for what work is happening, who's doing it, and what was learned.
+Beads is the single source of truth for what work is happening, who's doing it, and what was learned. Every skill follows the lifecycle defined in `protocols/workflow.md` (steps 1–9).
 
-> **Precedence**: `bd prime` injects generic beads guidance at session start. For session completion, **follow `protocols/workflow.md` instead** — it includes PR creation, quality verification, and hive-mind-specific steps that the generic protocol omits.
-
-### Bead Lifecycle
-
-Every task — whether triggered by `bd ready` or a direct user request — follows this cycle:
-
-1. **Setup**: Claim an existing bead (`bd update <id> --claim`) or create one (`bd create "Skill: description" -t task`). Read context from prior agents: `bd show <id>`.
-2. **Work**: Execute the skill's instructions. For complex multi-session work, escalate to `/aur2.scope` to produce a scope PR for user review. Close the current bead with a note pointing to the scope. `/aur2.execute` is invoked separately after the user approves the scope.
-3. **Record**: Leave context for the next agent via `bd comments add <id> "What was done. Key decisions. Files changed."` — this is the primary inter-agent knowledge transfer mechanism.
-4. **Close**: `bd close <id> --reason "concise summary" --suggest-next` — the reason becomes the bead's permanent record; `--suggest-next` shows newly unblocked work.
+> **Precedence**: `bd prime` injects generic beads guidance at session start. For session completion, **follow `protocols/workflow.md` instead** — it includes the full skill lifecycle, PR creation, and hive-mind-specific steps that the generic protocol omits.
 
 ### Quick Reference
 

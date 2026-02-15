@@ -259,8 +259,7 @@ hive-mind-main/
     ├── protocols/             Detailed agent workflow standards
     │   ├── alignment.md       Pre-implementation alignment protocol
     │   ├── quality.md         Verification, privacy, and deliverable standards
-    │   ├── workflow.md        Mode detection, branching, PR lifecycle
-    │   └── skill-lifecycle.md Common hive.* skill setup/closeout pattern
+    │   └── workflow.md        Mode detection, skill lifecycle, branching, PR lifecycle
     ├── scripts/               Fleet management utilities
     │   ├── setup-fleet.sh     Create agent worktrees
     │   ├── dashboard.sh       Query beads for fleet status
