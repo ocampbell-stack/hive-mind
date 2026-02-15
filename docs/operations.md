@@ -45,7 +45,7 @@ claude
 > /hive.ingest the attached Q1 planning doc
 ```
 
-The agent will: create a bead, do the work, commit, push, create a PR.
+The agent will: create a bead, gather relevant KB context, confirm its approach with you (for ambiguous or high-impact tasks), do the work, commit, push, create a PR.
 
 ### Option B: Pre-Create a Bead, Then Launch an Agent
 
@@ -175,6 +175,8 @@ bd show <id>          # Read the context the creating agent left behind
 ```
 
 ## PR Review Workflow
+
+Agents seek alignment with you **before** implementation (via `AskUserQuestion` for ambiguous or high-impact work). This means most issues should be caught early. The PR review is a second checkpoint for verifying the finished product.
 
 1. Agent completes work and creates a PR via `gh pr create`
 2. You receive the PR on GitHub

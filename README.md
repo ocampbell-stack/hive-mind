@@ -43,12 +43,18 @@ For task decomposition, agents also have `/aur2.scope` and `/aur2.execute`. When
 
 ### Human-in-the-Loop
 
-The Hive Mind follows two operating modes:
+The Hive Mind uses two complementary checkpoints to keep agents aligned with user intent:
+
+1. **Preliminary Alignment** (before implementation) — Before making changes, agents explore the knowledge base for relevant context, assess the impact of the proposed work, and confirm their approach with the user. For high-impact or ambiguous tasks, agents pause and ask clarifying questions. For clear, narrowly-scoped tasks, they state their plan and proceed. This catches misunderstandings at the lowest-cost moment — before any work is done.
+
+2. **PR Review** (after implementation) — Agents work on isolated feature branches and submit a Pull Request. The user reviews both the deliverable and the KB update before merging. The user can provide feedback via PR comments, and the agent iterates via `/hive.iterate`.
+
+These checkpoints apply across two operating modes:
 
 - **Manual mode** (Command Post): The user drives an agent directly, reviewing changes in real time. May commit to main.
-- **Autonomous mode** (Agent worktrees): Agents work on isolated feature branches via git worktrees, verify their own work against the knowledge base, then submit a **Pull Request**. The user reviews the PR — checking both the deliverable and the knowledge base update — before merging into `main`. The user can provide feedback via PR comments, and the agent iterates via `/hive.iterate`.
+- **Autonomous mode** (Agent worktrees): Full branching lifecycle required. Create feature branch, do work, submit PR, wait for review.
 
-See `protocols/autonomous-workflow.md` for the full lifecycle.
+See `protocols/preliminary-alignment.md` for the alignment protocol and `protocols/autonomous-workflow.md` for the full lifecycle.
 
 ## Architecture
 
@@ -79,13 +85,14 @@ All agent coordination runs through [beads](https://github.com/steveyegge/beads)
 Every `hive.*` skill follows a standard bead lifecycle:
 
 ```
-Setup → Work → Record → Close
+Setup → Align → Work → Record → Close
 ```
 
 1. **Setup** — Claim an existing bead or create a new one. Read prior context via `bd show`.
-2. **Work** — Execute the skill's core instructions.
-3. **Record** — `bd comments add` with a structured summary (what was done, decisions, files changed).
-4. **Close** — `bd close --reason "summary" --suggest-next` to complete and surface newly unblocked work.
+2. **Align** — Gather relevant KB context, assess impact, and confirm approach with the user before making changes. See `protocols/preliminary-alignment.md`.
+3. **Work** — Execute the skill's core instructions.
+4. **Record** — `bd comments add` with a structured summary (what was done, decisions, files changed).
+5. **Close** — `bd close --reason "summary" --suggest-next` to complete and surface newly unblocked work.
 
 Skills may also create follow-up beads for discovered work (e.g., `hive.groom` creates remediation beads, `hive.advise` creates action item beads). These follow-up beads feed the `bd ready` queue for other agents to pick up.
 
@@ -250,6 +257,7 @@ hive-mind-main/
     ├── knowledge-base/        The persistent mental model
     │   └── INDEX.md           Master index with staleness tracking
     ├── protocols/             Detailed agent workflow standards
+    │   ├── preliminary-alignment.md
     │   ├── compound-deliverable.md
     │   ├── pr-template.md
     │   ├── privacy-standards.md
