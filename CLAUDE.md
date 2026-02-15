@@ -76,8 +76,10 @@ Every task — whether triggered by `bd ready` or a direct user request — foll
 | `/hive.advise` | Analyze comms, recommend actions |
 | `/hive.maintain` | Improve fleet tooling |
 | `/hive.iterate` | Address PR review feedback |
-| `/aur2.scope` | Decompose complex tasks |
-| `/aur2.execute` | Execute scoped task plans |
+| `/aur2.scope` | Decompose complex tasks into phased plans |
+| `/aur2.execute` | Execute scoped task plans via beads |
+
+All skills have `disable-model-invocation: false` and full `allowed-tools` access. This means you CAN and SHOULD invoke `/aur2.scope` and `/aur2.execute` directly when a `hive.*` skill's complexity check calls for escalation — don't ask the user to type it. Branch isolation and PR review are the safety mechanisms, not tool or invocation restrictions.
 
 ## Skill Deployment
 
