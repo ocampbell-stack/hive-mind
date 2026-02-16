@@ -62,7 +62,7 @@ Follow `protocols/quality.md`:
 - Determine task weight (full or light)
 - Run the appropriate verification checks
 - Fix any failures before proceeding
-- If external sources were processed, note any accessibility issues for the Source Fidelity section of the PR
+- If external sources were processed, note any accessibility issues for the Source Accessibility section of the PR
 
 ### 8. Commit, Push, and PR (autonomous only)
 
@@ -103,7 +103,7 @@ Follow `protocols/quality.md`:
 ## Summary
 Brief description of what this PR accomplishes.
 
-## Source Fidelity
+## Source Accessibility
 _Include only when the task processed external documents, URLs, or non-markdown input. Omit for internal KB work or code-only changes._
 
 - **Processed**: What was successfully read and extracted
