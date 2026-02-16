@@ -44,6 +44,7 @@ Every task passes through quality checks before completion. Task weight determin
 ## Knowledge Base
 
 - Always consult `knowledge-base/INDEX.md` FIRST to find relevant context
+- The user profile (`knowledge-base/user/profile.md`) is foundational context — read it when framing deliverables, recommendations, or any user-facing output
 - Read only the files you need (KB grows large over time)
 - Update INDEX.md when you add or modify KB files
 - Include YAML frontmatter (source, date, confidence) on all KB files
@@ -73,6 +74,7 @@ Beads is the single source of truth for what work is happening, who's doing it, 
 
 | Skill | Purpose |
 |---|---|
+| `/hive.onboard` | Build or update user profile |
 | `/hive.ingest` | Ingest documents into KB |
 | `/hive.groom` | Audit KB for staleness/gaps |
 | `/hive.deliver` | Produce external deliverables |

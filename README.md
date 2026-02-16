@@ -34,6 +34,7 @@ Agents in this fleet execute specific workflows, each backed by a dedicated Clau
 
 | Workflow | Skill | Description |
 |---|---|---|
+| **Build User Profile** | `/hive.onboard` | Build or update the user's profile through structured conversation. Captures identity, expertise, goals, and preferences for how the hive-mind should augment their work. |
 | **Ingest Context** | `/hive.ingest` | Incorporate new reference documents, meeting notes, or user observations into the knowledge base. Tag information with source, date, and confidence level for staleness tracking. |
 | **Groom the Mental Model** | `/hive.groom` | Proactively audit the knowledge base for stale information, contradictions between entries, and gaps where referenced topics lack documentation. Surface questions for the user to resolve ambiguities. |
 | **Produce Deliverables** | `/hive.deliver` | Generate stakeholder-facing outputs — documents, code, plans, analyses — grounded in the current state of the knowledge base. Every claim traceable to a KB source. |
@@ -124,7 +125,8 @@ The knowledge base is structured for a large (100+ file) scale with an index sys
 ```
 knowledge-base/
     ├── INDEX.md               Master index: topic -> file path, with staleness metadata
-    ├── strategic-context/     User's role, priorities, OKRs, organizational position
+    ├── user/                  User identity, expertise, goals, augmentation preferences
+    ├── strategic-context/     Organizational strategy, priorities, OKRs
     ├── projects/              Per-project directories with charters, milestones, decisions
     ├── team/                  Professional models of team members (INTERNAL ONLY)
     └── workstreams/           Active workstream status, owners, blockers
@@ -211,7 +213,21 @@ This creates the workspace layout:
 └── agent-beta/           Worktree on agent-beta/workspace branch
 ```
 
-### Step 4: (Optional) Set Up Voice Visions
+### Step 4: Build Your User Profile
+
+The user profile tells your agents who you are, what you're working on, and how to help. Run from Command Post:
+
+```bash
+cd ~/my-hive-mind
+claude
+> /hive.onboard
+```
+
+The agent will ask about your role, expertise, goals, and preferences. This creates `knowledge-base/user/profile.md` — the foundation that all skills use to frame their outputs for you.
+
+> You can also provide freeform notes: `/hive.onboard` followed by a description of your role and work. The agent will extract structured profile data from your input.
+
+### Step 5: (Optional) Set Up Voice Visions
 
 If you want to capture ideas via audio recording:
 
@@ -249,10 +265,11 @@ See [`docs/operations.md`](docs/operations.md) for the full day-to-day operation
 
 Once your instance is running, try these first tasks:
 
-1. **Ingest context**: `/hive.ingest` some notes about your role, current projects, or team
-2. **Check the KB**: Look at `knowledge-base/INDEX.md` to see what was added
-3. **Groom**: `/hive.groom` to audit the KB for gaps
-4. **Produce a deliverable**: `/hive.deliver` a document grounded in your KB context
+1. **Build your profile**: `/hive.onboard` to tell your agents who you are and how to help
+2. **Ingest context**: `/hive.ingest` notes about your current projects or team
+3. **Check the KB**: Look at `knowledge-base/INDEX.md` to see what was added
+4. **Groom**: `/hive.groom` to audit the KB for gaps
+5. **Produce a deliverable**: `/hive.deliver` a document grounded in your KB context
 
 ## Maintenance
 
@@ -302,7 +319,8 @@ hive-mind-main/
     ├── docs/
     │   └── operations.md      Day-to-day fleet management guide
     ├── knowledge-base/        The persistent mental model
-    │   └── INDEX.md           Master index with staleness tracking
+    │   ├── INDEX.md           Master index with staleness tracking
+    │   └── user/              User identity and augmentation preferences
     ├── protocols/             Detailed agent workflow standards
     │   ├── alignment.md       Pre-implementation alignment protocol
     │   ├── quality.md         Verification, privacy, and deliverable standards

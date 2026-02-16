@@ -6,6 +6,7 @@ Before making changes, gather context, assess impact, and confirm your approach.
 
 ### 1. Context Gathering
 - Read `knowledge-base/INDEX.md` to identify relevant entries
+- Read `knowledge-base/user/profile.md` (if it exists) to understand the user's role, expertise, and goals
 - Read the KB files, protocols, and existing content related to the request
 - Note what already exists — prevents redundant or contradictory work
 
