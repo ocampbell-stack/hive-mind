@@ -1,11 +1,13 @@
 # Strategic Context
 
-This section contains high-level strategic information about the user's role, objectives, and priorities.
+This section contains organizational and program-level strategy: objectives, priorities, and the landscape the user operates in.
+
+> **Note**: The user's personal identity, expertise, and goals live in `user/profile.md`. This section is for the organizational context around them.
 
 ## Contents
-- `role.md` - User's role, responsibilities, organizational position
 - `priorities.md` - Active priority stack
 - Quarterly OKRs and strategic plans
+- Organizational position and program structure
 
 ## Usage
 Agents should consult this section when:

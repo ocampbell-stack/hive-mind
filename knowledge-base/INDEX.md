@@ -9,8 +9,11 @@ Total files: 0
 
 ## By Section
 
+### user/
+_No profile yet. Run `/hive.onboard` to create your user profile._
+
 ### strategic-context/
-_No entries yet. Use `/hive.ingest` to add strategic context._
+_No entries yet. Use `/hive.ingest` to add organizational strategy and priorities._
 
 ### projects/
 _No entries yet. Use `/hive.ingest` to add project context._
