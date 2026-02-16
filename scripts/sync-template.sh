@@ -135,10 +135,23 @@ echo "${#IDENTICAL[@]} files already in sync."
 echo ""
 
 if $DIFF_ONLY; then
+    if [[ ${#CHANGED[@]} -gt 0 ]]; then
+        for f in "${CHANGED[@]}"; do
+            diff -u --label "a/$f" --label "b/$f" "$PUBLIC_DIR/$f" "$PRIVATE_DIR/$f" || true
+        done
+    fi
+    if [[ ${#NEW[@]} -gt 0 ]]; then
+        for f in "${NEW[@]}"; do
+            diff -u --label /dev/null --label "b/$f" /dev/null "$PRIVATE_DIR/$f" || true
+        done
+    fi
     exit 0
 fi
 
 if $DRY_RUN; then
+    echo "To inspect the full diff:"
+    echo "  ./scripts/sync-template.sh --diff"
+    echo ""
     echo "=== DRY RUN — no changes made ==="
     exit 0
 fi
