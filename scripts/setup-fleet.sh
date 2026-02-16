@@ -49,6 +49,17 @@ fi
 echo "All prerequisites OK."
 echo ""
 
+# Set default GitHub repo (needed when multiple remotes exist)
+REPO_URL=$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || true)
+if [[ "$REPO_URL" =~ github\.com[:/](.+/.+?)(\.git)?$ ]]; then
+    GH_REPO="${BASH_REMATCH[1]}"
+    echo "Setting default GitHub repo: $GH_REPO"
+    gh repo set-default "$GH_REPO"
+else
+    echo "WARNING: Could not detect GitHub repo from origin remote. Run 'gh repo set-default' manually."
+fi
+echo ""
+
 # Create worktrees for each agent
 for agent in "${AGENTS[@]}"; do
     WORKTREE_PATH="$WORKSPACE_DIR/agent-$agent"
