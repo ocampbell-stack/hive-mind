@@ -1,30 +1,34 @@
 # Hive Mind
 
-A persistent, version-controlled knowledge base managed by parallel AI agents. The Hive Mind treats the user's mental model of their work as a living repository — strategic context, project state, team dynamics, and work products — maintained and extended by a fleet of Claude Code agents operating through git worktrees.
+A persistent, version-controlled knowledge base managed by parallel AI agents. The Hive Mind turns AI agents into expert-level assistants that augment the user's role, expertise, and effectiveness — grounded in a living repository of strategic context, project state, team dynamics, and work products.
 
 > **Your instance should be private.** It will contain models of team members and sensitive strategic context. See [Privacy & Professionalism](#privacy--professionalism) below.
 
 ## The Vision
 
+### The Purpose
+
+The Hive Mind exists to make AI agents genuinely useful collaborators — not generic assistants that start from scratch, but expert partners that understand who the user is, what they're working on, and how to help. By maintaining a systematically-updated knowledge base of the user's role, expertise, projects, team, and priorities, agents can produce outputs that are calibrated to the user's perspective and grounded in real context. The goal is augmentation: agents that make the user more effective at their actual work, operating as a force multiplier for the user's domain expertise and leadership.
+
 ### The Problem
 
-Significant engineering and leadership time is lost to context fragmentation. Every new AI session starts from scratch. Work products, strategic decisions, project state, and relationship context exist only in ephemeral chat sessions or scattered documents. Each new task requires manually re-curating context, cycling through repetitive explanations, and hoping nothing important was lost between sessions.
+Significant engineering and leadership time is lost to context fragmentation. Every new AI session starts from scratch. Work products, strategic decisions, project state, and relationship context exist only in ephemeral chat sessions or scattered documents. Each new task requires manually re-curating context, cycling through repetitive explanations, and hoping nothing important was lost between sessions. The result is that AI assistants remain generic — they can't tailor their outputs to the user's role, anticipate needs based on project state, or build on what previous sessions have learned.
 
 ### The Solution: A Persistent Mental Model
 
-The Hive Mind transitions from ephemeral AI sessions to a **persistent, version-controlled representation of the user's working context**. Rather than treating AI interactions as disposable conversations, the Hive Mind encodes everything an agent needs to be useful — the user's role, their projects, their team, their priorities, their in-progress work — as markdown files in a git repository.
+The Hive Mind transitions from ephemeral AI sessions to a **persistent, version-controlled representation of the user's working context**. Rather than treating AI interactions as disposable conversations, the Hive Mind encodes everything an agent needs to be useful — the user's identity and expertise, their projects, their team, their priorities, their in-progress work — as markdown files in a git repository.
 
-This repository is the shared memory that all agents read from and write to. When one agent learns something, that knowledge is committed to the repo so the next agent can pick up where the last one left off.
+This repository is the shared memory that all agents read from and write to. When one agent learns something, that knowledge is committed to the repo so the next agent can pick up where the last one left off. The knowledge base is systematically updated as a standard part of every ingestion and deliverable — not as an afterthought, but as a core mechanism that makes each subsequent interaction smarter and more tailored to the user.
 
 ### The Compound Deliverable Principle
 
 Every substantive task assigned to an agent produces up to three outputs:
 
-1. **The External Deliverable** — The actual work product requested: code, a document, an analysis, a recommendation.
+1. **The External Deliverable** — The actual work product requested: code, a document, an analysis, a recommendation — framed from the user's perspective and calibrated to their expertise.
 2. **The Internal Context Update** — An update to the Hive Mind knowledge base reflecting what the agent learned or what changed.
 3. **Verification** — Checks that the deliverable is faithful to the assignment, consistent with existing knowledge, and compliant with privacy standards.
 
-The rationale: we must assume the *next* agent will need to know what this agent just learned. By encoding this "mental model update" into the repo with every task, we eliminate the need to manually re-paste context for future work. The knowledge base compounds over time — each task leaves the system smarter than it found it.
+The rationale: we must assume the *next* agent will need to know what this agent just learned. By encoding this "mental model update" into the repo with every task, we eliminate the need to manually re-paste context for future work. The knowledge base compounds over time — each task leaves the system smarter than it found it, and each deliverable is better informed than the last.
 
 Task weight determines rigor: substantive work requires all three outputs, while light tasks (small fixes, iterations) require only the deliverable and a privacy scan. See [`protocols/quality.md`](protocols/quality.md) for the full framework.
 
