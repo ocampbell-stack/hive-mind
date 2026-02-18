@@ -81,6 +81,10 @@ Follow `protocols/quality.md`:
 
 3. **Capture session hash** (for resumability):
    ```bash
+   # Claude Code stores session transcripts as ~/.claude/projects/<encoded-path>/<uuid>.jsonl
+   # where <encoded-path> is $PWD with slashes replaced by dashes (e.g. /Users/me/repo → -Users-me-repo).
+   # This grabs the UUID from the most recently modified .jsonl file, which is the active session.
+   # Uses /bin/ls to avoid shell aliases (e.g. eza). Fails gracefully to empty string if no sessions exist.
    CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
    ```
 
@@ -168,6 +172,7 @@ When iterating on review comments (typically via `/hive.iterate`):
    git add -A
    git commit -m "address review: <summary>"
    git push
+   # Session hash retrieval — see Step 8.3 above for how this works
    CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
    gh pr comment <number> --body "Addressed feedback: <bullet list>
 
