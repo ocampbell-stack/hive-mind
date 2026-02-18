@@ -79,7 +79,12 @@ Follow `protocols/quality.md`:
    git push -u origin feat/{agent-name}/{task-description}
    ```
 
-3. **Create PR** targeting `main` using the format below:
+3. **Capture session hash** (for resumability):
+   ```bash
+   CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
+   ```
+
+4. **Create PR** targeting `main` using the format below (include `$CLAUDE_SESSION` in the Session section):
    ```bash
    gh pr create --base main --title "<title>" --body "<body>"
    ```
@@ -133,6 +138,10 @@ _Include only when the task processed external documents, URLs, or non-markdown 
 
 ## Notes
 Any additional context for the reviewer.
+
+## Session
+- Hash: `<session-id>`
+- Resume: `claude --resume <session-id>`
 ```
 
 ## PR Feedback Iteration
@@ -159,7 +168,11 @@ When iterating on review comments (typically via `/hive.iterate`):
    git add -A
    git commit -m "address review: <summary>"
    git push
-   gh pr comment <number> --body "Addressed feedback: <bullet list>"
+   CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
+   gh pr comment <number> --body "Addressed feedback: <bullet list>
+
+   ---
+   Session: \`$CLAUDE_SESSION\` · Resume: \`claude --resume $CLAUDE_SESSION\`"
    ```
 
 6. **Update beads**: `bd comments add <id> "Review feedback addressed (round N)"`
