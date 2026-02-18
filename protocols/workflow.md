@@ -62,7 +62,7 @@ Follow `protocols/quality.md`:
 - Determine task weight (full or light)
 - Run the appropriate verification checks
 - Fix any failures before proceeding
-- If external sources were processed, note any accessibility issues for the Source Accessibility section of the PR
+- If external sources were processed, enumerate external links found in the content. Attempt to follow links whose content would be useful for the task (use judgment — skip obviously irrelevant or inaccessible links). Report all link outcomes in the Source Accessibility section of the PR.
 
 ### 8. Commit, Push, and PR (autonomous only)
 
@@ -116,7 +116,9 @@ Brief description of what this PR accomplishes.
 _Include only when the task processed external documents, URLs, or non-markdown input. Omit for internal KB work or code-only changes._
 
 - **Processed**: What was successfully read and extracted
-- **Inaccessible**: Content that could not be read (embedded images, auth-gated URLs, binary data, etc.)
+- **Links followed**: URLs in the source material that were fetched and read (list each)
+- **Links not followed**: URLs that were skipped or couldn't be accessed, with reason per link (not relevant to task, auth-gated, no MCP tool available, etc.)
+- **Inaccessible**: Other content that could not be read (embedded images, binary data, etc.)
 - **Format issues**: Inefficiencies in the source format (e.g., base64-encoded images inflating file size, HTML artifacts)
 - **Recommendations**: How the user can improve input for future invocations
 
