@@ -163,8 +163,8 @@ Any additional context for the reviewer.
 ## Session
 - Agent: `$AGENT_NAME`
 - Branch: `$CURRENT_BRANCH`
-- Hash: `<session-id>`
-- Resume: `cd <agent-worktree-path> && claude --resume <session-id>`
+- Hash: `$CLAUDE_SESSION`
+- Resume: `cd $PWD && claude --resume $CLAUDE_SESSION`
 ```
 
 ## PR Feedback Iteration
@@ -207,10 +207,14 @@ The steps below apply to **open PRs**:
    # Session and context capture — see Step 8.3 above for how this works
    CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
    AGENT_NAME=$(basename "$PWD" | sed 's/^agent-//')
+   CURRENT_BRANCH=$(git branch --show-current)
    gh pr comment <number> --body "Addressed feedback: <bullet list>
 
    ---
-   Agent: \`$AGENT_NAME\` · Session: \`$CLAUDE_SESSION\` · Resume: \`cd $PWD && claude --resume $CLAUDE_SESSION\`"
+   - Agent: \`$AGENT_NAME\`
+   - Branch: \`$CURRENT_BRANCH\`
+   - Hash: \`$CLAUDE_SESSION\`
+   - Resume: \`cd $PWD && claude --resume $CLAUDE_SESSION\`"
    ```
 
 6. **Update beads**: `bd comments add <id> "Review feedback addressed (round N)"`
