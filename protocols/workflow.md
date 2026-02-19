@@ -169,7 +169,11 @@ Any additional context for the reviewer.
 
 ## PR Feedback Iteration
 
-When iterating on review comments (typically via `/hive.iterate`):
+When iterating on review comments (typically via `/hive.iterate`).
+
+> **Closed/merged PRs**: If the referenced PR is already closed or merged, the feedback lives in the user's prompt — not in PR comments. `/hive.iterate` handles this case by gathering original PR context, treating the user's prompt as the new direction, creating a fresh branch, and submitting a new PR referencing the original. See the skill for the full flow.
+
+The steps below apply to **open PRs**:
 
 1. **Identify the PR** — from input (PR number or URL). If not provided, attempt detection from current branch:
    ```bash
