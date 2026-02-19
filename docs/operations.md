@@ -179,11 +179,15 @@ bd show <id>          # Read the context the creating agent left behind
 Agents seek alignment with you **before** implementation (via `AskUserQuestion` for ambiguous or high-impact work). This means most issues should be caught early. The PR review is a second checkpoint for verifying the finished product.
 
 1. Agent completes work and creates a PR via `gh pr create`
-2. You receive the PR on GitHub
+2. You receive the PR on GitHub — the Session section shows which agent and branch produced the PR
 3. Review the deliverable AND the KB changes
 4. Leave comments on anything that needs revision
-5. Agent addresses feedback via `/hive.iterate #<PR-number>`
+5. Address feedback via `/hive.iterate #<PR-number>` — see options below
 6. Repeat until satisfied, then merge
+
+**Fastest path**: If the agent's session is still open after submitting the PR, review on GitHub and then invoke `/hive.iterate #<PR-number>` in the same session. The agent already has full context and is on the correct branch — no resume or branch checkout needed.
+
+**From a different session**: `/hive.iterate #<PR-number>` works from any agent worktree. The skill resolves the PR's branch and checks it out automatically. Use the portable resume command in the PR's Session section if you want to restore the original session's full conversation context.
 
 ```bash
 # From Command Post — see all open PRs

@@ -25,6 +25,19 @@ If already on a `feat/` branch (resuming), skip branch creation. Check for exist
 gh pr list --head $(git branch --show-current) --json number,url
 ```
 
+If picking up work on an existing PR (via resume, `/hive.iterate`, or user instruction):
+1. Resolve the target branch from the PR:
+   ```bash
+   PR_BRANCH=$(gh pr view <number> --json headRefName -q .headRefName)
+   ```
+2. If not already on that branch, check it out:
+   ```bash
+   git fetch origin
+   git checkout "$PR_BRANCH"
+   ```
+3. If checkout fails because the branch is checked out in another worktree, tell the user:
+   > Branch `{branch}` is currently checked out in another worktree. Run `./scripts/cleanup.sh {agent}` from the Command Post to free it, then retry.
+
 ### 2. Beads Setup
 
 - If triggered by an existing bead: `bd update <id> --claim` (or `--status in_progress` if already yours)
@@ -79,13 +92,15 @@ Follow `protocols/quality.md`:
    git push -u origin feat/{agent-name}/{task-description}
    ```
 
-3. **Capture session hash** (for resumability):
+3. **Capture session and context** (for resumability):
    ```bash
    # Claude Code stores session transcripts as ~/.claude/projects/<encoded-path>/<uuid>.jsonl
    # where <encoded-path> is $PWD with slashes replaced by dashes (e.g. /Users/me/repo → -Users-me-repo).
    # This grabs the UUID from the most recently modified .jsonl file, which is the active session.
    # Uses /bin/ls to avoid shell aliases (e.g. eza). Fails gracefully to empty string if no sessions exist.
    CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
+   AGENT_NAME=$(basename "$PWD" | sed 's/^agent-//')
+   CURRENT_BRANCH=$(git branch --show-current)
    ```
 
 4. **Create PR** targeting `main` using the format below (include `$CLAUDE_SESSION` in the Session section):
@@ -146,20 +161,31 @@ _Include only when the task processed external documents, URLs, or non-markdown 
 Any additional context for the reviewer.
 
 ## Session
+- Agent: `$AGENT_NAME`
+- Branch: `$CURRENT_BRANCH`
 - Hash: `<session-id>`
-- Resume: `claude --resume <session-id>`
+- Resume: `cd <agent-worktree-path> && claude --resume <session-id>`
 ```
 
 ## PR Feedback Iteration
 
 When iterating on review comments (typically via `/hive.iterate`):
 
-1. **Identify the PR** — from input, or detect from current branch:
+1. **Identify the PR** — from input (PR number or URL). If not provided, attempt detection from current branch:
    ```bash
    gh pr list --head $(git branch --show-current) --json number,url
    ```
 
-2. **Ensure correct branch** — check out the feature branch if needed.
+2. **Check out the PR's branch**:
+   ```bash
+   PR_BRANCH=$(gh pr view <number> --json headRefName -q .headRefName)
+   CURRENT=$(git branch --show-current)
+   if [ "$CURRENT" != "$PR_BRANCH" ]; then
+     git fetch origin
+     git checkout "$PR_BRANCH"
+   fi
+   ```
+   If checkout fails because the branch is checked out in another worktree, tell the user to run `./scripts/cleanup.sh {agent}` from the Command Post to free it.
 
 3. **Read feedback**:
    ```bash
@@ -174,12 +200,13 @@ When iterating on review comments (typically via `/hive.iterate`):
    git add -A
    git commit -m "address review: <summary>"
    git push
-   # Session hash retrieval — see Step 8.3 above for how this works
+   # Session and context capture — see Step 8.3 above for how this works
    CLAUDE_SESSION=$(/bin/ls -1t ~/.claude/projects/$(echo "$PWD" | tr '/' '-')/*.jsonl 2>/dev/null | head -1 | sed 's/.*\///' | sed 's/\.jsonl$//')
+   AGENT_NAME=$(basename "$PWD" | sed 's/^agent-//')
    gh pr comment <number> --body "Addressed feedback: <bullet list>
 
    ---
-   Session: \`$CLAUDE_SESSION\` · Resume: \`claude --resume $CLAUDE_SESSION\`"
+   Agent: \`$AGENT_NAME\` · Session: \`$CLAUDE_SESSION\` · Resume: \`cd $PWD && claude --resume $CLAUDE_SESSION\`"
    ```
 
 6. **Update beads**: `bd comments add <id> "Review feedback addressed (round N)"`
