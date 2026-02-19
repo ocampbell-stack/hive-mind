@@ -79,7 +79,7 @@ Beads is the single source of truth for what work is happening, who's doing it, 
 | `/hive.groom` | Audit KB for staleness/gaps |
 | `/hive.deliver` | Produce external deliverables |
 | `/hive.advise` | Analyze comms, recommend actions |
-| `/hive.iterate` | Address PR review feedback |
+| `/hive.iterate` | Iterate on prior work (open or closed/merged PRs) |
 | `/aur2.scope` | Decompose complex tasks into phased plans |
 | `/aur2.execute` | Execute scoped task plans via beads |
 

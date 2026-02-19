@@ -43,7 +43,7 @@ Agents in this fleet execute specific workflows, each backed by a dedicated Clau
 | **Groom the Mental Model** | `/hive.groom` | Proactively audit the knowledge base for stale information, contradictions between entries, and gaps where referenced topics lack documentation. Surface questions for the user to resolve ambiguities. |
 | **Produce Deliverables** | `/hive.deliver` | Generate stakeholder-facing outputs — documents, code, plans, analyses — grounded in the current state of the knowledge base. Every claim traceable to a KB source. |
 | **Recommend Engagement** | `/hive.advise` | Analyze meeting minutes, chat threads, or communications and recommend specific actions: feedback to give, questions to ask, risks to flag. Informed by team models and project context but never exposing internal assessments. |
-| **Iterate on Feedback** | `/hive.iterate` | Address PR review feedback on an existing feature branch. Read comments, make changes, push updates. |
+| **Iterate on Feedback** | `/hive.iterate` | Iterate on prior work. For open PRs: read comments, make changes, push updates. For closed/merged PRs: gather original context, apply new direction from user prompt, submit a follow-up PR. |
 
 For task decomposition, agents also have `/aur2.scope` and `/aur2.execute`. When a task is too complex for a single session, the agent escalates to `/aur2.scope`, which produces a work breakdown and submits it as a PR for user review. After the user approves, `/aur2.execute` is invoked separately to create beads and implement the work. Both skills are domain-aware — they detect whether they're operating in a codebase or knowledge base and select the appropriate template and research strategy.
 
